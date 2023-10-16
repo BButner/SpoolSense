@@ -41,7 +41,53 @@ struct FilamentsView: View {
             
             VStack {
                 ForEach(mainContext.filaments) { filament in
-                    Text(filament.name)
+                    HStack {
+                        ZStack {
+                            Rectangle()
+                                .fill(filament.color.uiColor())
+                                .mask {
+                                    Image(.filamentIcon)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .blendMode(.softLight)
+                                }
+                            
+                            Image(.filamentIcon)
+                                .resizable()
+                                .scaledToFit()
+                                .blendMode(.softLight)
+                        }
+                        .frame(width: 80, height: 80)
+                        
+                        VStack(alignment: .leading) {
+                            Text(filament.brand)
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .lineLimit(1)
+                            
+                            Text(filament.name)
+                                .font(.title2)
+                                .fontWeight(.semibold)
+                                .lineLimit(1)
+                        }
+                        
+                        Spacer()
+                        
+                        VStack {
+                            HStack {
+                                Text("⌀")
+                                    .font(.title3)
+                                    .foregroundStyle(.secondary)
+                                
+                                Text(filament.diameter.formatted())
+                                    .font(.caption)
+                                    .foregroundStyle(.secondary)
+                            }
+                        }
+                    }
+                    .padding(14)
+                    .background(Color(.secondarySystemGroupedBackground))
+                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
             }
         }

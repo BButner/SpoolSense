@@ -24,7 +24,7 @@ struct SpoolContainer: View {
             .tint(spool.filament.color.uiColor())
             
             VStack(alignment: .leading) {
-                Text(spool.filament.brand)
+                Text("\(spool.filament.brand) - \(spool.filament.name)")
                     .font(.caption)
                     .fontWeight(.semibold)
                     .lineLimit(1)

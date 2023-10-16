@@ -10,7 +10,16 @@
 import SwiftUI
 
 struct AddSpoolView: View {
+    @Environment(MainViewModel.self) private var mainContext
+    
     @State private var selectedTab = 0
+    @State private var spoolName: String = ""
+    @State private var filament: Filament?
+    @State private var lengthTotal: Double = 0
+    @State private var lengthRemaining: Double = 0
+    @State private var purchasePrice: Double = 0
+    @State private var spoolWeight: Double = 0
+    @State private var totalWeight: Double = 0
     
     var body: some View {
         VStack {
@@ -32,10 +41,10 @@ struct AddSpoolView: View {
             .padding()
             
             TabView(selection: $selectedTab) {
-                AddSpoolBasicInfo()
+                AddSpoolBasicInfo(spoolName: $spoolName, filament: $filament)
                     .tag(0)
                 
-                Text("Step 2")
+                AddSpoolDetails(filament: filament ?? FilamentConstants.PrusamentGalaxyBlack, name: $spoolName, lengthTotal: $lengthTotal, lengthRemaining: $lengthRemaining, purchasePrice: $purchasePrice, spoolWeight: $spoolWeight, totalWeight: $totalWeight)
                     .tag(1)
                 
                 Text("Step 3")
@@ -47,5 +56,13 @@ struct AddSpoolView: View {
 }
 
 #Preview {
-    AddSpoolView()
+    @State var api = SpoolSenseApi()
+    @State var mainContext = MainViewModel(api: api)
+    
+    return AddSpoolView()
+        .environment(api)
+        .environment(mainContext)
+        .task {
+            await mainContext.loadInitialData()
+        }
 }

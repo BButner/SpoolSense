@@ -11,7 +11,19 @@ import Foundation
 import SwiftUI
 
 @Observable
-final class Filament: Identifiable {
+final class Filament: Identifiable, Hashable {
+    static func == (lhs: Filament, rhs: Filament) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    var identifier: String {
+        return self.id.uuidString
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        return hasher.combine(identifier)
+    }
+    
     var id: UUID
     
     var name: String

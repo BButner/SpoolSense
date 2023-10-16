@@ -36,6 +36,7 @@
 		8B14F8A12ADDA533004DA7C0 /* SpoolContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8A02ADDA533004DA7C0 /* SpoolContainer.swift */; };
 		8B14F8A32ADDA596004DA7C0 /* SpoolSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8A22ADDA596004DA7C0 /* SpoolSheet.swift */; };
 		8B14F8A52ADDAD1D004DA7C0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8A42ADDAD1D004DA7C0 /* Binding.swift */; };
+		8B3BE4052ADDDDA100C0420C /* AddSpoolDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3BE4042ADDDDA100C0420C /* AddSpoolDetails.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -87,6 +88,7 @@
 		8B14F8A02ADDA533004DA7C0 /* SpoolContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolContainer.swift; sourceTree = "<group>"; };
 		8B14F8A22ADDA596004DA7C0 /* SpoolSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolSheet.swift; sourceTree = "<group>"; };
 		8B14F8A42ADDAD1D004DA7C0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
+		8B3BE4042ADDDDA100C0420C /* AddSpoolDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSpoolDetails.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -259,6 +261,7 @@
 			children = (
 				8B14F8942ADDA2EF004DA7C0 /* AddSpoolView.swift */,
 				8B14F8962ADDA30E004DA7C0 /* AddSpoolBasicInfo.swift */,
+				8B3BE4042ADDDDA100C0420C /* AddSpoolDetails.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -420,6 +423,7 @@
 				8B14F8792ADD99F7004DA7C0 /* Material.swift in Sources */,
 				8B14F87B2ADD9A0F004DA7C0 /* Filament.swift in Sources */,
 				8B14F8892ADD9DEF004DA7C0 /* SpoolsView.swift in Sources */,
+				8B3BE4052ADDDDA100C0420C /* AddSpoolDetails.swift in Sources */,
 				8B14F88F2ADD9E0C004DA7C0 /* CostsView.swift in Sources */,
 				8B14F8752ADD99B0004DA7C0 /* ChoosableColor.swift in Sources */,
 				8B14F8A12ADDA533004DA7C0 /* SpoolContainer.swift in Sources */,

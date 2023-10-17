@@ -39,7 +39,7 @@ struct SpoolsView: View {
                             .tint(.primary)
                     }
                     .sheet(isPresented: $showAddView)  {
-                        AddSpoolView()
+                        AddSpoolView(showAddView: $showAddView)
                     }
                 }
                 

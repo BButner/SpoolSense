@@ -50,6 +50,19 @@ final class Spool: Identifiable {
     func remainingValue() -> Double {
         self.purchasePrice * self.remainingPct()
     }
+    
+    func toApi() -> SpoolApi {
+        SpoolApi(
+            id: self.id,
+            filamentId: self.filament.id,
+            name: self.name,
+            lengthTotal: self.lengthTotal,
+            lengthRemaining: self.lengthRemaining,
+            purchasePrice: self.purchasePrice,
+            spoolWeight: self.spoolWeight,
+            totalWeight: self.totalWeight
+        )
+    }
 }
 
 enum SpoolSortOptions: Int, CaseIterable {

@@ -24,6 +24,17 @@ class SpoolApi: Codable, Identifiable {
         case id, filament_id, name, length_total, length_remaining, purchase_price, spool_weight, total_weight
     }
     
+    init(id: UUID, filamentId: UUID, name: String, lengthTotal: Double, lengthRemaining: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double) {
+        self.id = id
+        self.filamentId = filamentId
+        self.name = name
+        self.lengthTotal = lengthTotal
+        self.lengthRemaining = lengthRemaining
+        self.purchasePrice = purchasePrice
+        self.spoolWeight = spoolWeight
+        self.totalWeight = totalWeight
+    }
+    
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         

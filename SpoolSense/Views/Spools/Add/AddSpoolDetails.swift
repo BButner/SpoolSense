@@ -106,6 +106,7 @@ struct AddSpoolDetails: View {
                         .multilineTextAlignment(.trailing)
                     Text("$")
                         .foregroundStyle(.secondary)
+                        .frame(width: 15)
                     
                 }
             }

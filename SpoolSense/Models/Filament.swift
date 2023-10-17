@@ -31,6 +31,9 @@ final class Filament: Identifiable, Hashable {
     var abrasive: Bool
     var brand: String
     var color: ChoosableColor
+    var material: Material
+    var isBuiltIn: Bool = false
+    var isUnselectedView: Bool = false
     
     init(api: FilamentApi) {
         self.id = api.id
@@ -39,19 +42,25 @@ final class Filament: Identifiable, Hashable {
         self.abrasive = api.abrasive
         self.brand = api.brand
         self.color = api.color
+        self.material = api.material
     }
     
-    init(id: UUID, name: String, diameter: Double, abrasive: Bool, brand: String, color: ChoosableColor) {
+    init(id: UUID, name: String, diameter: Double, abrasive: Bool, brand: String, color: ChoosableColor, material: Material, isBuiltIn: Bool = false, isUnselectedView: Bool = false) {
         self.id = id
         self.name = name
         self.diameter = diameter
         self.abrasive = abrasive
         self.brand = brand
         self.color = color
+        self.material = material
+        self.isBuiltIn = isBuiltIn
+        self.isUnselectedView = isUnselectedView
     }
 }
 
 struct FilamentConstants {
-    static let PrusamentOrange = Filament(id: UUID(), name: "Prusa Orange", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.orange)
-    static let PrusamentGalaxyBlack = Filament(id: UUID(), name: "Prusa Galaxy Black", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.black)
+    static let PrusamentOrange = Filament(id: UUID(), name: "Prusa Orange", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.orange, material: .petg)
+    static let PrusamentGalaxyBlack = Filament(id: UUID(), name: "Prusa Galaxy Black", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.black, material: .petg)
+    
+    static let FilamentUnselected = Filament(id: UUID(), name: "N/A", diameter: 0, abrasive: false, brand: "N/A", color: ChoosableColor.black, material: .petg, isUnselectedView: true)
 }

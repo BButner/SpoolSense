@@ -16,4 +16,5 @@ class FilamentApi: Codable, Identifiable {
     var abrasive: Bool = false
     var brand: String
     var color: ChoosableColor
+    var material: Material
 }

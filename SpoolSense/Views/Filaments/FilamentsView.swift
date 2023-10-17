@@ -35,30 +35,13 @@ struct FilamentsView: View {
                         .tint(.primary)
                 }
                 .sheet(isPresented: $showAddView)  {
-//                    AddSpoolView()
+                    //                    AddSpoolView()
                 }
             }
             
             VStack {
                 ForEach(mainContext.filaments) { filament in
                     HStack {
-                        ZStack {
-                            Rectangle()
-                                .fill(filament.color.uiColor())
-                                .mask {
-                                    Image(.filamentIcon)
-                                        .resizable()
-                                        .scaledToFit()
-                                        .blendMode(.softLight)
-                                }
-                            
-                            Image(.filamentIcon)
-                                .resizable()
-                                .scaledToFit()
-                                .blendMode(.softLight)
-                        }
-                        .frame(width: 80, height: 80)
-                        
                         VStack(alignment: .leading) {
                             Text(filament.brand)
                                 .font(.caption)
@@ -73,14 +56,33 @@ struct FilamentsView: View {
                         
                         Spacer()
                         
-                        VStack {
-                            HStack {
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text("\(filament.temperatureMinimum.formatted()) °C - \(filament.temperatureMaximum.formatted()) °C")
+                                .font(.caption)
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.secondary)
+                            
+                            HStack(alignment: .center) {
                                 Text("⌀")
                                     .font(.title3)
+                                    .fontWeight(.semibold)
                                     .foregroundStyle(.secondary)
                                 
-                                Text(filament.diameter.formatted())
+                                Text(filament.diameter.formatted() + " mm")
                                     .font(.caption)
+                                    .fontWeight(.semibold)
+                                    .foregroundStyle(.secondary)
+                            }
+                            
+                            HStack(alignment: .center) {
+                                Rectangle()
+                                    .fill(filament.color.uiColor())
+                                    .frame(width: 32, height: 4)
+                                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                
+                                Text(filament.material.rawValue)
+                                    .font(.caption)
+                                    .fontWeight(.semibold)
                                     .foregroundStyle(.secondary)
                             }
                         }
@@ -103,4 +105,7 @@ struct FilamentsView: View {
     return FilamentsView()
         .environment(api)
         .environment(mainContext)
+        .task {
+            await mainContext.loadInitialData()
+        }
 }

@@ -10,7 +10,7 @@
 import Foundation
 import SwiftUI
 
-enum ChoosableColor: String, Codable, Hashable {
+enum ChoosableColor: String, Codable, Hashable, CaseIterable {
     case black = "Black"
     case blue = "Blue"
     case brown = "Brown"
@@ -24,6 +24,8 @@ enum ChoosableColor: String, Codable, Hashable {
     case red = "Red"
     case teal = "Teal"
     case yellow = "Yellow"
+    
+    case unselected = "Unselected"
 }
 
 extension ChoosableColor {
@@ -55,6 +57,8 @@ extension ChoosableColor {
             return Color(.systemTeal)
         case .yellow:
             return Color(.systemYellow)
+        case .unselected:
+            return .clear
         }
     }
 }

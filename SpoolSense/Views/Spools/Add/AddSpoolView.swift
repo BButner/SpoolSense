@@ -23,7 +23,7 @@ struct AddSpoolView: View {
     @State private var purchasePrice: Double = 0
     @State private var spoolWeight: Double = 0
     @State private var totalWeight: Double = 0
-    @State private var color: ChoosableColor?
+    @State private var color: ChoosableColor = ChoosableColor.unselected
     
     var isInvalid: Bool {
         spoolName == ""
@@ -33,6 +33,7 @@ struct AddSpoolView: View {
         || totalWeight == 0
         || spoolWeight == 0
         || filament.isUnselectedView
+        || (filament.color == nil && color == ChoosableColor.unselected)
     }
     
     var body: some View {
@@ -48,8 +49,6 @@ struct AddSpoolView: View {
                             .padding(.top, 2)
                             .multilineTextAlignment(.center)
                     }
-                    
-                    SpoolContainer(spool: Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color))
                     
                     VStack(alignment: .leading) {
                         Text("Basic Info")
@@ -91,6 +90,23 @@ struct AddSpoolView: View {
                                 ForEach(selectableFilaments) { filament in
                                     Text(filament.isUnselectedView ? "Select a Filament" : "\(filament.brand) - \(filament.name)")
                                         .tag(filament)
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                            
+                            Picker(filament.color == nil ? "Color (Required)" : "Color (Optional)", selection: $color) {
+                                ForEach(ChoosableColor.allCases, id: \.rawValue) { c in
+                                    HStack(alignment: .center) {
+                                        if (c != ChoosableColor.unselected) {
+                                            Rectangle()
+                                                .fill(c.uiColor())
+                                                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                                .frame(width: 32, height: 4)
+                                        }
+                                        
+                                        Text(c.rawValue)
+                                    }
+                                    .tag(c)
                                 }
                             }
                             .pickerStyle(.navigationLink)
@@ -184,10 +200,11 @@ struct AddSpoolView: View {
                             .animation(.spring, value: isInvalid)
                         
                         Button() {
-                            let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color)
+                            let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
                             
                             Task {
                                 if await api.insertSpool(spool: newSpool.toApi()) {
+                                    mainContext.spools.append(newSpool)
                                     showAddView.toggle()
                                 }
                             }

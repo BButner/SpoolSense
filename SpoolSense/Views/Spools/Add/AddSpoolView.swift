@@ -14,7 +14,7 @@ struct AddSpoolView: View {
     @Environment(SpoolSenseApi.self) private var api
     
     @Binding var showAddView: Bool
-    
+    var selectableFilaments: [Filament]
     @State private var selectedTab = 0
     @State private var spoolName: String = ""
     @State private var filament: Filament = FilamentConstants.FilamentUnselected
@@ -88,7 +88,7 @@ struct AddSpoolView: View {
                             }
                             
                             Picker("", selection: $filament) {
-                                ForEach(mainContext.filaments) { filament in
+                                ForEach(selectableFilaments) { filament in
                                     HStack {
                                         VStack(alignment: .leading) {
                                             Text(filament.brand)
@@ -247,7 +247,7 @@ struct AddSpoolView: View {
     @State var api = SpoolSenseApi()
     @State var mainContext = MainViewModel(api: api)
     
-    return AddSpoolView(showAddView: .constant(true))
+    return AddSpoolView(showAddView: .constant(true), selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)
         .environment(api)
         .environment(mainContext)
         .task {

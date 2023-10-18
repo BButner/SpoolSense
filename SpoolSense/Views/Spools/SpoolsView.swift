@@ -39,7 +39,7 @@ struct SpoolsView: View {
                             .tint(.primary)
                     }
                     .sheet(isPresented: $showAddView)  {
-                        AddSpoolView(showAddView: $showAddView)
+                        AddSpoolView(showAddView: $showAddView, selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)
                     }
                 }
                 

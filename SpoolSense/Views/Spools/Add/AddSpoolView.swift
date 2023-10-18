@@ -80,7 +80,7 @@ struct AddSpoolView: View {
                                 
                                 Spacer()
                                 
-                                TextField("Required", value: $purchasePrice, format: .number)
+                                TextField("Required", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter())
                                     .multilineTextAlignment(.trailing)
                                 Text("$")
                                     .foregroundStyle(.secondary)
@@ -133,7 +133,7 @@ struct AddSpoolView: View {
                                 
                                 Spacer()
                                 
-                                TextField("Required", value: $lengthTotal, format: .number)
+                                TextField("Required", value: $lengthTotal, formatter: NumberFormatterConstants.emptyZeroFormatter())
                                     .multilineTextAlignment(.trailing)
                                 Text("m")
                                     .foregroundStyle(.secondary)
@@ -149,7 +149,7 @@ struct AddSpoolView: View {
                                 
                                 Spacer()
                                 
-                                TextField("Required", value: $lengthRemaining, format: .number)
+                                TextField("Required", value: $lengthRemaining, formatter: NumberFormatterConstants.emptyZeroFormatter())
                                     .multilineTextAlignment(.trailing)
                                 Text("m")
                                     .foregroundStyle(.secondary)
@@ -165,7 +165,7 @@ struct AddSpoolView: View {
                                 
                                 Spacer()
                                 
-                                TextField("Required", value: $totalWeight, format: .number)
+                                TextField("Required", value: $totalWeight, formatter: NumberFormatterConstants.emptyZeroFormatter())
                                     .multilineTextAlignment(.trailing)
                                 Text("g")
                                     .foregroundStyle(.secondary)
@@ -181,7 +181,7 @@ struct AddSpoolView: View {
                                 
                                 Spacer()
                                 
-                                TextField("Required", value: $spoolWeight, format: .number)
+                                TextField("Required", value: $spoolWeight, formatter: NumberFormatterConstants.emptyZeroFormatter())
                                     .multilineTextAlignment(.trailing)
                                 Text("g")
                                     .foregroundStyle(.secondary)

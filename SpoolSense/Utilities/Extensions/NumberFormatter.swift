@@ -9,14 +9,13 @@
 
 import Foundation
 
-extension Formatter {
-    // TODO Fix this...
-    static let zeroEmpty: NumberFormatter = {
+struct NumberFormatterConstants {
+    static func emptyZeroFormatter() -> NumberFormatter {
         let formatter = NumberFormatter()
         
         formatter.numberStyle = .none
         formatter.zeroSymbol = ""
         
         return formatter
-    }()
+    }
 }

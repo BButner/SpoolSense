@@ -14,6 +14,9 @@ struct ContentView: View {
     var body: some View {
         if mainContext.session == nil {
             LoginView()
+                .task {
+                    mainContext.session = await api.getSession()
+                }
         } else {
             MainNavigation()
         }

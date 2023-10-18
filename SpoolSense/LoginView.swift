@@ -8,9 +8,16 @@
 
 
 import SwiftUI
+import SafariServices
+import GoTrue
 
 struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
+    @Environment(SpoolSenseApi.self) var api
+    @Environment(MainViewModel.self) var mainContext
+    
+    @State private var isGoogleSheetOpen: Bool = false
+    @State private var url: URL = .init(string: "https://spoolsense.com")!
     
     var body: some View {
         VStack {
@@ -54,7 +61,17 @@ struct LoginView: View {
                 .tint(.primary)
                 
                 Button {
-                    
+                    Task {
+                        let url = await api.getOAuthSignInURL(provider: Provider.google)
+                        
+                        if url == nil {
+                            return
+                        }
+                        
+                        self.url = url!
+                                                    
+                        isGoogleSheetOpen.toggle()
+                    }
                 } label: {
                     ZStack(alignment: .center) {
                         HStack {
@@ -76,11 +93,33 @@ struct LoginView: View {
                 }
                 .buttonStyle(.borderedProminent)
                 .tint(.white)
+                .sheet(isPresented: $isGoogleSheetOpen, content: {
+                    SafariView(url: $url)
+                        .onOpenURL { url in
+                            if url.host() == "auth-callback" {
+                                Task {
+                                    mainContext.session = await api.getSessionFromUrl(url: url)
+                                    
+                                    isGoogleSheetOpen.toggle()
+                                }
+                            }
+                        }
+                })
             }
         }
         .padding()
         .background(Color(.systemGroupedBackground))
     }
+}
+
+struct SafariView: UIViewControllerRepresentable {
+    @Binding var url: URL
+
+    func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
+        return SFSafariViewController(url: url)
+    }
+
+    func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {}
 }
 
 #Preview {

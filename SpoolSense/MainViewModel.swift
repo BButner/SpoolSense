@@ -21,6 +21,10 @@ final class MainViewModel {
         self.api = api
     }
     
+    func loginWithGoogle() async {
+        
+    }
+    
     func loadInitialData() async {
         await api.fetchFilaments().map { Filament(api: $0) }
             .forEach {

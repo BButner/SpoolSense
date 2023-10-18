@@ -10,6 +10,7 @@
 import SwiftUI
 
 struct AddSpoolView: View {
+    @Environment(\.colorScheme) private var colorScheme
     @Environment(MainViewModel.self) private var mainContext
     @Environment(SpoolSenseApi.self) private var api
     
@@ -113,7 +114,7 @@ struct AddSpoolView: View {
                             .pickerStyle(.navigationLink)
                         }
                         .padding()
-                        .background(Color(.systemGroupedBackground))
+                        .background(Color(colorScheme == .dark ? .secondarySystemGroupedBackground : .systemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     }
                     
@@ -188,12 +189,12 @@ struct AddSpoolView: View {
                             }
                         }
                         .padding()
-                        .background(Color(.systemGroupedBackground))
+                        .background(Color(colorScheme == .dark ? .secondarySystemGroupedBackground : .systemGroupedBackground))
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     }
                     
                     Spacer()
-                                        
+                    
                     VStack(alignment: .leading) {
                         Text("Please make sure all values are entered, and no values are set to 0.")
                             .fontWeight(.semibold)
@@ -223,7 +224,7 @@ struct AddSpoolView: View {
                             .padding(.vertical, 4)
                         }
                         .buttonStyle(.borderedProminent)
-                        .tint(.primary)
+                        .tint(.indigo)
                         .fontWeight(.semibold)
                         .disabled(isInvalid)
                         .padding(.top, 4)

@@ -19,6 +19,14 @@ final class SpoolSenseApi {
         self.client = SupabaseClient(supabaseURL: URL(string: "https://dwuykowhnylkzrvithkv.supabase.co")!, supabaseKey: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR3dXlrb3dobnlsa3pydml0aGt2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE2OTcwNjE2OTUsImV4cCI6MjAxMjYzNzY5NX0.-XLbIPmfK4UDhQSjr_fQVEPscZQK3q8dUzySceQrH2k")
     }
     
+    func test() async {
+        do {
+            let session = try await client.auth.session
+        } catch {
+            print("Error: \(error)")
+        }
+    }
+    
     func insertSpool(spool: SpoolApi) async -> Bool {
         let query = client.database
             .from("spools_dev")

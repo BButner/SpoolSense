@@ -8,12 +8,14 @@
 
 
 import Foundation
+import Supabase
 
 @Observable
 final class MainViewModel {
     let api: SpoolSenseApi
     var filaments = [Filament]()
     var spools = [Spool]()
+    var session: Session?
     
     init(api: SpoolSenseApi) {
         self.api = api

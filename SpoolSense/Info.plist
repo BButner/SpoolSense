@@ -3,6 +3,13 @@
 <plist version="1.0">
 <dict>
 	<key>UILaunchScreen</key>
-	<dict/>
+	<dict>
+        <key>CFBundleTypeRole</key>
+        <string>Editor</string>
+        <key>CFBundleURLSchemes</key>
+        <array>
+            <string>app.SpoolSense://login-callback</string>
+        </array>
+    </dict>
 </dict>
 </plist>

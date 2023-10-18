@@ -57,7 +57,7 @@ struct FilamentsView: View {
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 4) {
-                            Text("\(filament.temperatureMinimum.formatted()) °C - \(filament.temperatureMaximum.formatted()) °C")
+                            Text("\(filament.nozzleMin.formatted()) °C - \(filament.nozzleMax.formatted()) °C")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
@@ -76,7 +76,7 @@ struct FilamentsView: View {
                             
                             HStack(alignment: .center) {
                                 Rectangle()
-                                    .fill(filament.color.uiColor())
+                                    .fill(filament.color?.uiColor() ?? .gray)
                                     .frame(width: 32, height: 4)
                                     .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                                 

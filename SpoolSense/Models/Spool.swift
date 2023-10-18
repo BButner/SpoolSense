@@ -20,8 +20,9 @@ final class Spool: Identifiable {
     var purchasePrice: Double
     var spoolWeight: Double // Default in Grams
     var totalWeight: Double // Default in Grams
+    var color: ChoosableColor?
     
-    init(id: UUID, filament: Filament, name: String, lengthTotal: Double, lengthRemaining: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double) {
+    init(id: UUID, filament: Filament, name: String, lengthTotal: Double, lengthRemaining: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double, color: ChoosableColor?) {
         self.id = id
         self.filament = filament
         self.name = name
@@ -30,6 +31,7 @@ final class Spool: Identifiable {
         self.purchasePrice = purchasePrice
         self.spoolWeight = spoolWeight
         self.totalWeight = totalWeight
+        self.color = color
     }
     
     init(api: SpoolApi, filament: Filament) {
@@ -41,6 +43,7 @@ final class Spool: Identifiable {
         self.purchasePrice = api.purchasePrice
         self.spoolWeight = api.spoolWeight
         self.totalWeight = api.totalWeight
+        self.color = api.color
     }
     
     func remainingPct() -> Double {
@@ -60,8 +63,13 @@ final class Spool: Identifiable {
             lengthRemaining: self.lengthRemaining,
             purchasePrice: self.purchasePrice,
             spoolWeight: self.spoolWeight,
-            totalWeight: self.totalWeight
+            totalWeight: self.totalWeight,
+            color: self.color
         )
+    }
+    
+    func uiColor() -> Color {
+        self.color?.uiColor() ?? self.filament.color?.uiColor() ?? .gray
     }
 }
 
@@ -106,9 +114,9 @@ extension SpoolSortOptions {
 }
 
 struct SpoolConstants {
-    static let demoSpoolPrusaOrange = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Orange", lengthTotal: 342, lengthRemaining: 300, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 800)
+    static let demoSpoolPrusaOrange = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Orange", lengthTotal: 342, lengthRemaining: 300, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 800, color: .orange)
     
-    static let demoSpoolPrusaGalaxyBlack = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Black", lengthTotal: 342, lengthRemaining: 275, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 600)
+    static let demoSpoolPrusaGalaxyBlack = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Black", lengthTotal: 342, lengthRemaining: 275, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 600, color: .orange)
     
     static let demoSpoolCollection = [SpoolConstants.demoSpoolPrusaOrange, SpoolConstants.demoSpoolPrusaGalaxyBlack]
 }

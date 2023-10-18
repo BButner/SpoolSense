@@ -29,15 +29,15 @@
 		8B14F88F2ADD9E0C004DA7C0 /* CostsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F88E2ADD9E0C004DA7C0 /* CostsView.swift */; };
 		8B14F8922ADD9E1D004DA7C0 /* SettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8912ADD9E1D004DA7C0 /* SettingsView.swift */; };
 		8B14F8952ADDA2EF004DA7C0 /* AddSpoolView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8942ADDA2EF004DA7C0 /* AddSpoolView.swift */; };
-		8B14F8972ADDA30E004DA7C0 /* AddSpoolBasicInfo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8962ADDA30E004DA7C0 /* AddSpoolBasicInfo.swift */; };
 		8B14F89A2ADDA359004DA7C0 /* Stat.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8992ADDA359004DA7C0 /* Stat.swift */; };
 		8B14F89D2ADDA42A004DA7C0 /* Double.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F89C2ADDA42A004DA7C0 /* Double.swift */; };
 		8B14F89F2ADDA4C6004DA7C0 /* SpoolList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F89E2ADDA4C6004DA7C0 /* SpoolList.swift */; };
 		8B14F8A12ADDA533004DA7C0 /* SpoolContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8A02ADDA533004DA7C0 /* SpoolContainer.swift */; };
 		8B14F8A32ADDA596004DA7C0 /* SpoolSheet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8A22ADDA596004DA7C0 /* SpoolSheet.swift */; };
 		8B14F8A52ADDAD1D004DA7C0 /* Binding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B14F8A42ADDAD1D004DA7C0 /* Binding.swift */; };
-		8B3BE4052ADDDDA100C0420C /* AddSpoolDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3BE4042ADDDDA100C0420C /* AddSpoolDetails.swift */; };
 		8B3BE4102ADEF17E00C0420C /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3BE40F2ADEF17E00C0420C /* NumberFormatter.swift */; };
+		8B91D1342ADF53380092B46A /* MainNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1332ADF53380092B46A /* MainNavigation.swift */; };
+		8B91D1362ADF53EA0092B46A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1352ADF53EA0092B46A /* LoginView.swift */; };
 		8BC1E3262ADF38D300EB95AF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -83,15 +83,15 @@
 		8B14F88E2ADD9E0C004DA7C0 /* CostsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CostsView.swift; sourceTree = "<group>"; };
 		8B14F8912ADD9E1D004DA7C0 /* SettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsView.swift; sourceTree = "<group>"; };
 		8B14F8942ADDA2EF004DA7C0 /* AddSpoolView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSpoolView.swift; sourceTree = "<group>"; };
-		8B14F8962ADDA30E004DA7C0 /* AddSpoolBasicInfo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSpoolBasicInfo.swift; sourceTree = "<group>"; };
 		8B14F8992ADDA359004DA7C0 /* Stat.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Stat.swift; sourceTree = "<group>"; };
 		8B14F89C2ADDA42A004DA7C0 /* Double.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Double.swift; sourceTree = "<group>"; };
 		8B14F89E2ADDA4C6004DA7C0 /* SpoolList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolList.swift; sourceTree = "<group>"; };
 		8B14F8A02ADDA533004DA7C0 /* SpoolContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolContainer.swift; sourceTree = "<group>"; };
 		8B14F8A22ADDA596004DA7C0 /* SpoolSheet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolSheet.swift; sourceTree = "<group>"; };
 		8B14F8A42ADDAD1D004DA7C0 /* Binding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Binding.swift; sourceTree = "<group>"; };
-		8B3BE4042ADDDDA100C0420C /* AddSpoolDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddSpoolDetails.swift; sourceTree = "<group>"; };
 		8B3BE40F2ADEF17E00C0420C /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
+		8B91D1332ADF53380092B46A /* MainNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigation.swift; sourceTree = "<group>"; };
+		8B91D1352ADF53EA0092B46A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		8BC1E3242ADF37DE00EB95AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -155,6 +155,8 @@
 				8B14F8472ADD9835004DA7C0 /* Preview Content */,
 				8B14F8842ADD9B8A004DA7C0 /* MainViewModel.swift */,
 				8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */,
+				8B91D1332ADF53380092B46A /* MainNavigation.swift */,
+				8B91D1352ADF53EA0092B46A /* LoginView.swift */,
 			);
 			path = SpoolSense;
 			sourceTree = "<group>";
@@ -267,8 +269,6 @@
 			isa = PBXGroup;
 			children = (
 				8B14F8942ADDA2EF004DA7C0 /* AddSpoolView.swift */,
-				8B14F8962ADDA30E004DA7C0 /* AddSpoolBasicInfo.swift */,
-				8B3BE4042ADDDDA100C0420C /* AddSpoolDetails.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -432,12 +432,11 @@
 				8B14F8792ADD99F7004DA7C0 /* Material.swift in Sources */,
 				8B14F87B2ADD9A0F004DA7C0 /* Filament.swift in Sources */,
 				8B14F8892ADD9DEF004DA7C0 /* SpoolsView.swift in Sources */,
-				8B3BE4052ADDDDA100C0420C /* AddSpoolDetails.swift in Sources */,
 				8B14F88F2ADD9E0C004DA7C0 /* CostsView.swift in Sources */,
 				8B14F8752ADD99B0004DA7C0 /* ChoosableColor.swift in Sources */,
 				8B14F8A12ADDA533004DA7C0 /* SpoolContainer.swift in Sources */,
+				8B91D1342ADF53380092B46A /* MainNavigation.swift in Sources */,
 				8B14F8A32ADDA596004DA7C0 /* SpoolSheet.swift in Sources */,
-				8B14F8972ADDA30E004DA7C0 /* AddSpoolBasicInfo.swift in Sources */,
 				8B14F89F2ADDA4C6004DA7C0 /* SpoolList.swift in Sources */,
 				8B14F8442ADD9834004DA7C0 /* ContentView.swift in Sources */,
 				8B14F8422ADD9834004DA7C0 /* SpoolSenseApp.swift in Sources */,
@@ -448,6 +447,7 @@
 				8B14F8732ADD9991004DA7C0 /* FilamentApi.swift in Sources */,
 				8B14F8772ADD99CB004DA7C0 /* SpoolApi.swift in Sources */,
 				8B14F88C2ADD9DFE004DA7C0 /* FilamentsView.swift in Sources */,
+				8B91D1362ADF53EA0092B46A /* LoginView.swift in Sources */,
 				8B14F8712ADD9966004DA7C0 /* SpoolSenseApi.swift in Sources */,
 				8B3BE4102ADEF17E00C0420C /* NumberFormatter.swift in Sources */,
 				8B14F8802ADD9AA0004DA7C0 /* SpoolSenseError.swift in Sources */,

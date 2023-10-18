@@ -42,7 +42,7 @@ struct SpoolSheet: View {
                     Text("")
                 } currentValueLabel: {
                     Text("\(Int(selectedSpool!.lengthRemaining))m")
-                        .foregroundStyle(selectedSpool!.filament.color.uiColor())
+                        .foregroundStyle(selectedSpool!.uiColor())
                         .fontWeight(.semibold)
                 } minimumValueLabel: {
                     Text("0m")
@@ -52,7 +52,7 @@ struct SpoolSheet: View {
                         .foregroundStyle(.secondary)
                 }
                 .gaugeStyle(.linearCapacity)
-                .tint(selectedSpool!.filament.color.uiColor())
+                .tint(selectedSpool!.uiColor())
                 .padding(.vertical)
             }
             .padding(20)

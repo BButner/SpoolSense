@@ -15,16 +15,19 @@ class FilamentApi: Codable, Identifiable {
     var diameter: Double = 1.75
     var abrasive: Bool = false
     var brand: String
-    var color: ChoosableColor
+    var color: ChoosableColor?
     var material: Material
-    var temperatureMinimum: Double
-    var temperatureMaximum: Double
+    var nozzleMin: Double
+    var nozzleMax: Double
+    var bedMin: Double
+    var bedMax: Double
+    var isDefault: Bool
     
     enum CodingKeys: CodingKey {
-        case id, name, diameter, abrasive, brand, color, material, temperature_minimum, temperature_maximum
+        case id, name, diameter, abrasive, brand, color, material, nozzle_min, nozzle_max, bed_min, bed_max, is_default
     }
     
-    init(id: UUID, name: String, diameter: Double, abrasive: Bool, brand: String, color: ChoosableColor, material: Material, temperatureMinimum: Double, temperatureMaximum: Double) {
+    init(id: UUID, name: String, diameter: Double, abrasive: Bool, brand: String, color: ChoosableColor?, material: Material, nozzleMin: Double, nozzleMax: Double, bedMin: Double, bedMax: Double) {
         self.id = id
         self.name = name
         self.diameter = diameter
@@ -32,22 +35,28 @@ class FilamentApi: Codable, Identifiable {
         self.brand = brand
         self.color = color
         self.material = material
-        self.temperatureMinimum = temperatureMinimum
-        self.temperatureMaximum = temperatureMaximum
+        self.nozzleMin = nozzleMin
+        self.nozzleMax = nozzleMax
+        self.bedMin = bedMin
+        self.bedMax = bedMax
+        self.isDefault = false
     }
     
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        
+                
         self.id = try UUID(uuidString: container.decode(String.self, forKey: .id))!
         self.name = try container.decode(String.self, forKey: .name)
         self.diameter = try container.decode(Double.self, forKey: .diameter)
         self.abrasive = try container.decode(Bool.self, forKey: .abrasive)
         self.brand = try container.decode(String.self, forKey: .brand)
-        self.color = try container.decode(ChoosableColor.self, forKey: .color)
+        self.color = try container.decodeIfPresent(ChoosableColor.self, forKey: .color)
         self.material = try container.decode(Material.self, forKey: .material)
-        self.temperatureMinimum = try container.decode(Double.self, forKey: .temperature_minimum)
-        self.temperatureMaximum = try container.decode(Double.self, forKey: .temperature_maximum)
+        self.nozzleMin = try container.decode(Double.self, forKey: .nozzle_min)
+        self.nozzleMax = try container.decode(Double.self, forKey: .nozzle_max)
+        self.bedMin = try container.decode(Double.self, forKey: .bed_min)
+        self.bedMax = try container.decode(Double.self, forKey: .bed_max)
+        self.isDefault = try container.decode(Bool.self, forKey: .is_default)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -60,7 +69,10 @@ class FilamentApi: Codable, Identifiable {
         try container.encode(brand, forKey: .brand)
         try container.encode(color, forKey: .color)
         try container.encode(material, forKey: .material)
-        try container.encode(temperatureMinimum, forKey: .temperature_minimum)
-        try container.encode(temperatureMaximum, forKey: .temperature_maximum)
+        try container.encode(nozzleMin, forKey: .nozzle_min)
+        try container.encode(nozzleMax, forKey: .nozzle_max)
+        try container.encode(bedMin, forKey: .bed_min)
+        try container.encode(bedMax, forKey: .bed_max)
+        try container.encode(false, forKey: .is_default)
     }
 }

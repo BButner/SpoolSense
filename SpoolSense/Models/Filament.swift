@@ -30,12 +30,14 @@ final class Filament: Identifiable, Hashable {
     var diameter: Double
     var abrasive: Bool
     var brand: String
-    var color: ChoosableColor
+    var color: ChoosableColor?
     var material: Material
     var isBuiltIn: Bool = false
     var isUnselectedView: Bool = false
-    var temperatureMinimum: Double
-    var temperatureMaximum: Double
+    var nozzleMin: Double
+    var nozzleMax: Double
+    var bedMin: Double
+    var bedMax: Double
     
     init(api: FilamentApi) {
         self.id = api.id
@@ -45,11 +47,13 @@ final class Filament: Identifiable, Hashable {
         self.brand = api.brand
         self.color = api.color
         self.material = api.material
-        self.temperatureMinimum = api.temperatureMinimum
-        self.temperatureMaximum = api.temperatureMaximum
+        self.nozzleMin = api.nozzleMin
+        self.nozzleMax = api.nozzleMax
+        self.bedMin = api.bedMin
+        self.bedMax = api.bedMax
     }
     
-    init(id: UUID, name: String, diameter: Double, abrasive: Bool, brand: String, color: ChoosableColor, material: Material, temperatureMinimum: Double, temperatureMaximum: Double, isBuiltIn: Bool = false, isUnselectedView: Bool = false) {
+    init(id: UUID, name: String, diameter: Double, abrasive: Bool, brand: String, color: ChoosableColor, material: Material, nozzleMin: Double, nozzleMax: Double, bedMin: Double, bedMax: Double, isBuiltIn: Bool = false, isUnselectedView: Bool = false) {
         self.id = id
         self.name = name
         self.diameter = diameter
@@ -59,14 +63,16 @@ final class Filament: Identifiable, Hashable {
         self.material = material
         self.isBuiltIn = isBuiltIn
         self.isUnselectedView = isUnselectedView
-        self.temperatureMinimum = temperatureMinimum
-        self.temperatureMaximum = temperatureMaximum
+        self.nozzleMin = nozzleMin
+        self.nozzleMax = nozzleMax
+        self.bedMin = bedMin
+        self.bedMax = bedMax
     }
 }
 
 struct FilamentConstants {
-    static let PrusamentOrange = Filament(id: UUID(), name: "Prusa Orange", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.orange, material: .petg, temperatureMinimum: 220, temperatureMaximum: 250)
-    static let PrusamentGalaxyBlack = Filament(id: UUID(), name: "Prusa Galaxy Black", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.black, material: .petg, temperatureMinimum: 220, temperatureMaximum: 250)
+    static let PrusamentOrange = Filament(id: UUID(), name: "Prusa Orange", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.orange, material: .pla, nozzleMin: 190, nozzleMax: 220, bedMin: 40, bedMax: 60)
+    static let PrusamentGalaxyBlack = Filament(id: UUID(), name: "Prusa Galaxy Black", diameter: 1.75, abrasive: false, brand: "Prusamant", color: ChoosableColor.black, material: .petg, nozzleMin: 230, nozzleMax: 250, bedMin: 80, bedMax: 90)
     
-    static let FilamentUnselected = Filament(id: UUID(), name: "N/A", diameter: 0, abrasive: false, brand: "N/A", color: ChoosableColor.black, material: .petg, temperatureMinimum: 0, temperatureMaximum: 0, isUnselectedView: true)
+    static let FilamentUnselected = Filament(id: UUID(), name: "N/A", diameter: 0, abrasive: false, brand: "N/A", color: ChoosableColor.black, material: .petg, nozzleMin: 0, nozzleMax: 0, bedMin: 0, bedMax: 0, isUnselectedView: true)
 }

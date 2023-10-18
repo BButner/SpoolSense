@@ -87,37 +87,10 @@ struct AddSpoolView: View {
                                 
                             }
                             
-                            Picker("", selection: $filament) {
+                            Picker("Filament", selection: $filament) {
                                 ForEach(selectableFilaments) { filament in
-                                    HStack {
-                                        VStack(alignment: .leading) {
-                                            Text(filament.brand)
-                                                .font(.subheadline)
-                                                .foregroundStyle(Color.accentColor)
-                                            
-                                            Text(filament.name)
-                                                .fontWeight(.bold)
-                                                .font(.body)
-                                                .multilineTextAlignment(.leading)
-                                                .foregroundStyle(Color.accentColor)
-                                        }
-                                        
-                                        Spacer()
-                                        
-                                        VStack(alignment: .trailing) {
-                                            HStack(alignment: .center) {
-                                                Rectangle()
-                                                    .fill(color?.uiColor() ?? filament.color?.uiColor() ?? .gray)
-                                                    .frame(width: 40, height: 4)
-                                                    .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                                                
-                                                Text(filament.material.rawValue)
-                                                    .font(.subheadline)
-                                                    .fontWeight(.semibold)
-                                            }
-                                        }
-                                    }
-                                    .tag(filament)
+                                    Text(filament.isUnselectedView ? "Select a Filament" : "\(filament.brand) - \(filament.name)")
+                                        .tag(filament)
                                 }
                             }
                             .pickerStyle(.navigationLink)

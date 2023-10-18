@@ -23,6 +23,7 @@ struct AddSpoolView: View {
     @State private var purchasePrice: Double = 0
     @State private var spoolWeight: Double = 0
     @State private var totalWeight: Double = 0
+    @State private var color: ChoosableColor?
     
     var isInvalid: Bool {
         spoolName == ""
@@ -48,7 +49,7 @@ struct AddSpoolView: View {
                             .multilineTextAlignment(.center)
                     }
                     
-                    SpoolContainer(spool: Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight))
+                    SpoolContainer(spool: Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color))
                     
                     VStack(alignment: .leading) {
                         Text("Basic Info")
@@ -106,7 +107,7 @@ struct AddSpoolView: View {
                                         VStack(alignment: .trailing) {
                                             HStack(alignment: .center) {
                                                 Rectangle()
-                                                    .fill(filament.color.uiColor())
+                                                    .fill(color?.uiColor() ?? filament.color?.uiColor() ?? .gray)
                                                     .frame(width: 40, height: 4)
                                                     .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                                                 
@@ -210,7 +211,7 @@ struct AddSpoolView: View {
                             .animation(.spring, value: isInvalid)
                         
                         Button() {
-                            let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight)
+                            let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color)
                             
                             Task {
                                 if await api.insertSpool(spool: newSpool.toApi()) {

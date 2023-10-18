@@ -18,10 +18,10 @@ struct SpoolContainer: View {
                 Text("")
             } currentValueLabel: {
                 Text("\(Int(spool.lengthRemaining))m")
-                    .foregroundStyle(spool.filament.color.uiColor())
+                    .foregroundStyle(spool.uiColor())
             }
             .gaugeStyle(AccessoryCircularCapacityGaugeStyle())
-            .tint(spool.filament.color.uiColor())
+            .tint(spool.uiColor())
             
             VStack(alignment: .leading) {
                 Text("\(spool.filament.brand) - \(spool.filament.name)")

@@ -19,12 +19,13 @@ class SpoolApi: Codable, Identifiable {
     var purchasePrice: Double
     var spoolWeight: Double // Default in Grams
     var totalWeight: Double // Default in Grams
+    var color: ChoosableColor?
     
     enum CodingKeys: CodingKey {
-        case id, filament_id, name, length_total, length_remaining, purchase_price, spool_weight, total_weight
+        case id, filament_id, name, length_total, length_remaining, purchase_price, spool_weight, total_weight, color
     }
     
-    init(id: UUID, filamentId: UUID, name: String, lengthTotal: Double, lengthRemaining: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double) {
+    init(id: UUID, filamentId: UUID, name: String, lengthTotal: Double, lengthRemaining: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double, color: ChoosableColor?) {
         self.id = id
         self.filamentId = filamentId
         self.name = name
@@ -33,6 +34,7 @@ class SpoolApi: Codable, Identifiable {
         self.purchasePrice = purchasePrice
         self.spoolWeight = spoolWeight
         self.totalWeight = totalWeight
+        self.color = color
     }
     
     required init(from decoder: Decoder) throws {
@@ -47,6 +49,7 @@ class SpoolApi: Codable, Identifiable {
         self.purchasePrice = try container.decode(Double.self, forKey: .purchase_price)
         self.spoolWeight = try container.decode(Double.self, forKey: .spool_weight)
         self.totalWeight = try container.decode(Double.self, forKey: .total_weight)
+        self.color = try container.decodeIfPresent(ChoosableColor.self, forKey: .color)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -61,5 +64,6 @@ class SpoolApi: Codable, Identifiable {
         try container.encode(purchasePrice, forKey: .purchase_price)
         try container.encode(spoolWeight, forKey: .spool_weight)
         try container.encode(totalWeight, forKey: .total_weight)
+        try container.encode(color, forKey: .color)
     }
 }

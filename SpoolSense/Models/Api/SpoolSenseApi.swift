@@ -68,10 +68,21 @@ final class SpoolSenseApi {
     
     func fetchFilaments() async -> [FilamentApi] {
         do {
-            return try await client.database.from("filaments_dev")
+            var filaments: [FilamentApi] = try await client.database.from("filaments_dev")
                 .select()
                 .execute()
                 .value
+            
+            let default_filaments: [FilamentApi] = try await client.database.from("filaments_default")
+                .select()
+                .execute()
+                .value
+            
+            print("Default Filaments: \(default_filaments)")
+            
+            filaments.append(contentsOf: default_filaments)
+            
+            return filaments
         } catch {
             print("Error when Fetching Filaments: \(error)")
             

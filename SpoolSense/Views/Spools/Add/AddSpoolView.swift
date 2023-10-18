@@ -49,6 +49,7 @@ struct AddSpoolView: View {
                             .padding(.top, 2)
                             .multilineTextAlignment(.center)
                     }
+                    .padding(.vertical)
                     
                     VStack(alignment: .leading) {
                         Text("Basic Info")
@@ -191,6 +192,8 @@ struct AddSpoolView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                     }
                     
+                    Spacer()
+                                        
                     VStack(alignment: .leading) {
                         Text("Please make sure all values are entered, and no values are set to 0.")
                             .fontWeight(.semibold)

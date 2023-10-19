@@ -44,14 +44,14 @@ struct LoginView: View {
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 32, height: 32)
-                                .foregroundStyle(.primary)
+                                .foregroundStyle(colorScheme == .dark ? .black : .white)
                             
                             Spacer()
                         }
                         
                         Text("Continue with Apple")
                             .fontWeight(.semibold)
-                            .foregroundStyle(.primary)
+                            .foregroundStyle(colorScheme == .dark ? .black : .white)
                         
                         Spacer()
                     }

@@ -11,14 +11,26 @@ struct ContentView: View {
     @Environment(MainViewModel.self) private var mainContext
     @Environment(SpoolSenseApi.self) private var api
     
+    @State private var isCheckingLogin: Bool = true
+    
     var body: some View {
-        if mainContext.session == nil {
-            LoginView()
-                .task {
-                    mainContext.session = await api.getSession()
+        ZStack {
+            if mainContext.session == nil {
+                LoginView(isCheckingLogin: $isCheckingLogin)
+            } else {
+                MainNavigation()
+            }
+            
+            VStack {
+                GeometryReader { geometry in
                 }
-        } else {
-            MainNavigation()
+                Spacer()
+                ProgressView()
+                Spacer()
+            }
+            .background(Color(.systemGroupedBackground))
+            .opacity(isCheckingLogin ? 1 : 0)
+            .animation(.spring, value: isCheckingLogin)
         }
     }
 }

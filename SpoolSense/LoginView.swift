@@ -15,6 +15,8 @@ struct LoginView: View {
     @Environment(\.colorScheme) var colorScheme
     @Environment(SpoolSenseApi.self) var api
     @Environment(MainViewModel.self) var mainContext
+
+    @Binding var isCheckingLogin: Bool
     
     @State private var isGoogleSheetOpen: Bool = false
     @State private var url: URL = .init(string: "https://spoolsense.com")!
@@ -32,93 +34,115 @@ struct LoginView: View {
                     .font(.largeTitle)
                     .fontWeight(.semibold)
             }
+            
             Spacer()
             
-            VStack(spacing: 15) {
-                Button {
-                    
-                } label: {
-                    ZStack(alignment: .center) {
-                        HStack {
-                            Image(systemName: "apple.logo")
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
+            ZStack {
+                ProgressView()
+                    .opacity(isCheckingLogin || mainContext.session != nil ? 1 : 0)
+                    .animation(.spring, value: isCheckingLogin)
+                    .controlSize(.large)
+                
+                VStack(spacing: 15) {
+                    Button {
+                        
+                    } label: {
+                        ZStack(alignment: .center) {
+                            HStack {
+                                Image(systemName: "apple.logo")
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                                    .foregroundStyle(colorScheme == .dark ? .black : .white)
+                                
+                                Spacer()
+                            }
+                            
+                            Text("Continue with Apple")
+                                .fontWeight(.semibold)
                                 .foregroundStyle(colorScheme == .dark ? .black : .white)
                             
                             Spacer()
                         }
-                        
-                        Text("Continue with Apple")
-                            .fontWeight(.semibold)
-                            .foregroundStyle(colorScheme == .dark ? .black : .white)
-                        
-                        Spacer()
+                        .padding(6)
                     }
-                    .padding(6)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.primary)
-                
-                Button {
-                    Task {
-                        let url = await api.getOAuthSignInURL(provider: Provider.google)
-                        
-                        if url == nil {
-                            return
+                    .buttonStyle(.borderedProminent)
+                    .tint(.primary)
+                    
+                    Button {
+                        Task {
+                            let url = await api.getOAuthSignInURL(provider: Provider.google)
+                            
+                            if url == nil {
+                                return
+                            }
+                            
+                            self.url = url!
+                            
+                            isGoogleSheetOpen.toggle()
                         }
-                        
-                        self.url = url!
-                                                    
-                        isGoogleSheetOpen.toggle()
-                    }
-                } label: {
-                    ZStack(alignment: .center) {
-                        HStack {
-                            Image(.googleLogo)
-                                .resizable()
-                                .scaledToFit()
-                                .frame(width: 32, height: 32)
+                    } label: {
+                        ZStack(alignment: .center) {
+                            HStack {
+                                Image(.googleLogo)
+                                    .resizable()
+                                    .scaledToFit()
+                                    .frame(width: 32, height: 32)
+                                
+                                Spacer()
+                            }
+                            
+                            Text("Continue with Google")
+                                .fontWeight(.semibold)
+                                .foregroundStyle(.black)
                             
                             Spacer()
                         }
-                        
-                        Text("Continue with Google")
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.black)
-                        
-                        Spacer()
+                        .padding(6)
                     }
-                    .padding(6)
-                }
-                .buttonStyle(.borderedProminent)
-                .tint(.white)
-                .sheet(isPresented: $isGoogleSheetOpen, content: {
-                    SafariView(url: $url)
-                        .onOpenURL { url in
-                            if url.host() == "auth-callback" {
-                                Task {
-                                    mainContext.session = await api.getSessionFromUrl(url: url)
-                                    
-                                    isGoogleSheetOpen.toggle()
+                    .buttonStyle(.borderedProminent)
+                    .tint(.white)
+                    .sheet(isPresented: $isGoogleSheetOpen, content: {
+                        SafariView(url: $url)
+                            .background(Color(.secondarySystemGroupedBackground))
+                            .onOpenURL { url in
+                                if url.host() == "auth-callback" {
+                                    Task {
+                                        mainContext.session = await api.getSessionFromUrl(url: url)
+                                        
+                                        isGoogleSheetOpen.toggle()
+                                    }
                                 }
                             }
-                        }
-                })
+                    })
+                }
+                .transition(.slide)
+                .opacity(!isCheckingLogin && mainContext.session == nil ? 1 : 0)
+                .animation(.spring, value: isCheckingLogin)
             }
         }
         .padding()
         .background(Color(.systemGroupedBackground))
+        .onAppear {
+            Task {
+                print("Getting login...")
+                mainContext.session = await api.getSession()
+                
+                withAnimation {
+                    isCheckingLogin = false
+                }
+            }
+        }
     }
 }
 
 struct SafariView: UIViewControllerRepresentable {
     @Binding var url: URL
-
+    
     func makeUIViewController(context: UIViewControllerRepresentableContext<SafariView>) -> SFSafariViewController {
         return SFSafariViewController(url: url)
     }
-
+    
     func updateUIViewController(_ uiViewController: SFSafariViewController, context: UIViewControllerRepresentableContext<SafariView>) {}
 }
 
@@ -126,7 +150,7 @@ struct SafariView: UIViewControllerRepresentable {
     @State var api = SpoolSenseApi()
     @State var mainContext = MainViewModel(api: api)
     
-    return LoginView()
+    return LoginView(isCheckingLogin: .constant(false))
         .environment(api)
         .environment(mainContext)
 }

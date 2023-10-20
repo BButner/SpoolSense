@@ -13,6 +13,8 @@ struct SpoolContainer: View {
     @Bindable var spool: Spool
     
     var body: some View {
+        let _ = Self._printChanges()
+        
         HStack(alignment: .center, spacing: 14) {
             Gauge(value: spool.lengthRemaining, in: 0...spool.lengthTotal) {
                 Text("")

@@ -68,6 +68,20 @@ final class Filament: Identifiable, Hashable {
         self.bedMin = bedMin
         self.bedMax = bedMax
     }
+    
+    func updateFromRefresh(api: FilamentApi) {
+        if self.id != api.id { self.id = api.id }
+        if self.name != api.name { self.name = api.name }
+        if self.diameter != api.diameter { self.diameter = api.diameter }
+        if self.abrasive != api.abrasive { self.abrasive = api.abrasive }
+        if self.brand != api.brand { self.brand = api.brand }
+        if self.color != api.color { self.color = api.color }
+        if self.material != api.material { self.material = api.material }
+        if self.nozzleMin != api.nozzleMin { self.nozzleMin = api.nozzleMin }
+        if self.nozzleMax != api.nozzleMax { self.nozzleMax = api.nozzleMax }
+        if self.bedMin != api.bedMin { self.bedMin = api.bedMin }
+        if self.bedMax != api.bedMax { self.bedMax = api.bedMax }
+    }
 }
 
 struct FilamentConstants {

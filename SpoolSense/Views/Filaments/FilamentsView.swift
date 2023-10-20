@@ -95,6 +95,9 @@ struct FilamentsView: View {
         }
         .padding()
         .background(Color(.systemGroupedBackground))
+        .refreshable {
+            await mainContext.refreshFilaments()
+        }
     }
 }
 

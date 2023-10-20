@@ -126,9 +126,18 @@ extension SpoolSortOptions {
 }
 
 struct SpoolConstants {
-    static let demoSpoolPrusaOrange = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Orange", lengthTotal: 342, lengthRemaining: 300, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 800, color: .orange)
+    static let demoSpoolOrange = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Orange", lengthTotal: 342, lengthRemaining: 300, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 800, color: .orange)
     
-    static let demoSpoolPrusaGalaxyBlack = Spool(id: UUID(), filament: FilamentConstants.PrusamentOrange, name: "My Favorite Black", lengthTotal: 342, lengthRemaining: 275, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 600, color: .orange)
+    static let demoSpoolBlack = Spool(id: UUID(), filament: FilamentConstants.PrusamentGalaxyBlack, name: "My Favorite Black", lengthTotal: 342, lengthRemaining: 178, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 600, color: .black)
     
-    static let demoSpoolCollection = [SpoolConstants.demoSpoolPrusaOrange, SpoolConstants.demoSpoolPrusaGalaxyBlack]
+    static let demoSpoolBlue = Spool(id: UUID(), filament: FilamentConstants.PrusamentGalaxyBlack, name: "My Favorite Blue", lengthTotal: 342, lengthRemaining: 342, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 600, color: .blue)
+    
+    static let demoSpoolPurple = Spool(id: UUID(), filament: FilamentConstants.PrusamentGalaxyBlack, name: "My Favorite Blue", lengthTotal: 342, lengthRemaining: 264, purchasePrice: 29.99, spoolWeight: 1024, totalWeight: 600, color: .purple)
+    
+    static let demoSpoolCollection = [
+        SpoolConstants.demoSpoolOrange,
+        SpoolConstants.demoSpoolBlack,
+        SpoolConstants.demoSpoolPurple,
+        SpoolConstants.demoSpoolBlue
+    ]
 }

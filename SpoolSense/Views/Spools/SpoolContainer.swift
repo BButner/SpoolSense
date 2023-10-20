@@ -11,18 +11,10 @@ import SwiftUI
 
 struct SpoolContainer: View {
     @Bindable var spool: Spool
+    @State private var animatedEndAngle: Angle = .degrees(-90.0)
     
     var body: some View {        
         HStack(alignment: .center, spacing: 14) {
-            Gauge(value: spool.lengthRemaining, in: 0...spool.lengthTotal) {
-                Text("")
-            } currentValueLabel: {
-                Text("\(Int(spool.lengthRemaining))m")
-                    .foregroundStyle(spool.uiColor())
-            }
-            .gaugeStyle(AccessoryCircularCapacityGaugeStyle())
-            .tint(spool.uiColor())
-            
             VStack(alignment: .leading) {
                 Text("\(spool.filament.brand) - \(spool.filament.name)")
                     .font(.caption)
@@ -40,6 +32,18 @@ struct SpoolContainer: View {
             }
             
             Spacer()
+            
+            ZStack {
+                ArcView(
+                    endAngle: .degrees(270.0), style: spool.uiColor().opacity(0.2)
+                )
+                .frame(width: 50, height: 50)
+                
+                ArcView(
+                    endAngle: .degrees((360.0 * spool.remainingPct()) - 90.0), style: spool.uiColor()
+                )
+                .frame(width: 50, height: 50)
+            }
         }
         .padding(14)
         .background(Color(.secondarySystemGroupedBackground))
@@ -48,5 +52,13 @@ struct SpoolContainer: View {
 }
 
 #Preview {
-    SpoolContainer(spool: SpoolConstants.demoSpoolPrusaOrange)
+    VStack {
+        Spacer()
+        ForEach(SpoolConstants.demoSpoolCollection) { spool in
+            SpoolContainer(spool: spool)
+        }
+        Spacer()
+    }
+    .padding()
+    .background(Color(.systemGroupedBackground))
 }

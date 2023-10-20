@@ -62,5 +62,5 @@ struct SpoolSheet: View {
 }
 
 #Preview {
-    SpoolSheet(selectedSpool: .constant(SpoolConstants.demoSpoolPrusaOrange))
+    SpoolSheet(selectedSpool: .constant(SpoolConstants.demoSpoolOrange))
 }

@@ -38,6 +38,10 @@
 		8B3BE4102ADEF17E00C0420C /* NumberFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3BE40F2ADEF17E00C0420C /* NumberFormatter.swift */; };
 		8B91D1342ADF53380092B46A /* MainNavigation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1332ADF53380092B46A /* MainNavigation.swift */; };
 		8B91D1362ADF53EA0092B46A /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1352ADF53EA0092B46A /* LoginView.swift */; };
+		8B91D1382AE1BA420092B46A /* TransactionApi.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1372AE1BA420092B46A /* TransactionApi.swift */; };
+		8B91D13A2AE1BA4E0092B46A /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1392AE1BA4E0092B46A /* TransactionType.swift */; };
+		8B91D13C2AE1BD4C0092B46A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D13B2AE1BD4C0092B46A /* Transaction.swift */; };
+		8B91D1402AE2C83F0092B46A /* TransactionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */; };
 		8BC1E3262ADF38D300EB95AF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -92,6 +96,10 @@
 		8B3BE40F2ADEF17E00C0420C /* NumberFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberFormatter.swift; sourceTree = "<group>"; };
 		8B91D1332ADF53380092B46A /* MainNavigation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainNavigation.swift; sourceTree = "<group>"; };
 		8B91D1352ADF53EA0092B46A /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		8B91D1372AE1BA420092B46A /* TransactionApi.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionApi.swift; sourceTree = "<group>"; };
+		8B91D1392AE1BA4E0092B46A /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
+		8B91D13B2AE1BD4C0092B46A /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
+		8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSource.swift; sourceTree = "<group>"; };
 		8BC1E3242ADF37DE00EB95AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -194,6 +202,7 @@
 				8B14F8782ADD99F7004DA7C0 /* Material.swift */,
 				8B14F87A2ADD9A0F004DA7C0 /* Filament.swift */,
 				8B14F87C2ADD9A45004DA7C0 /* Spool.swift */,
+				8B91D13E2AE2C8340092B46A /* Transactions */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -204,6 +213,7 @@
 				8B14F8702ADD9966004DA7C0 /* SpoolSenseApi.swift */,
 				8B14F8722ADD9991004DA7C0 /* FilamentApi.swift */,
 				8B14F8762ADD99CB004DA7C0 /* SpoolApi.swift */,
+				8B91D1372AE1BA420092B46A /* TransactionApi.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -289,6 +299,16 @@
 				8B14F8A42ADDAD1D004DA7C0 /* Binding.swift */,
 			);
 			path = Extensions;
+			sourceTree = "<group>";
+		};
+		8B91D13E2AE2C8340092B46A /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				8B91D1392AE1BA4E0092B46A /* TransactionType.swift */,
+				8B91D13B2AE1BD4C0092B46A /* Transaction.swift */,
+				8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */,
+			);
+			path = Transactions;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -433,13 +453,17 @@
 				8B14F87B2ADD9A0F004DA7C0 /* Filament.swift in Sources */,
 				8B14F8892ADD9DEF004DA7C0 /* SpoolsView.swift in Sources */,
 				8B14F88F2ADD9E0C004DA7C0 /* CostsView.swift in Sources */,
+				8B91D1382AE1BA420092B46A /* TransactionApi.swift in Sources */,
 				8B14F8752ADD99B0004DA7C0 /* ChoosableColor.swift in Sources */,
+				8B91D1402AE2C83F0092B46A /* TransactionSource.swift in Sources */,
 				8B14F8A12ADDA533004DA7C0 /* SpoolContainer.swift in Sources */,
 				8B91D1342ADF53380092B46A /* MainNavigation.swift in Sources */,
 				8B14F8A32ADDA596004DA7C0 /* SpoolSheet.swift in Sources */,
+				8B91D13A2AE1BA4E0092B46A /* TransactionType.swift in Sources */,
 				8B14F89F2ADDA4C6004DA7C0 /* SpoolList.swift in Sources */,
 				8B14F8442ADD9834004DA7C0 /* ContentView.swift in Sources */,
 				8B14F8422ADD9834004DA7C0 /* SpoolSenseApp.swift in Sources */,
+				8B91D13C2AE1BD4C0092B46A /* Transaction.swift in Sources */,
 				8B14F8A52ADDAD1D004DA7C0 /* Binding.swift in Sources */,
 				8B14F89D2ADDA42A004DA7C0 /* Double.swift in Sources */,
 				8B14F89A2ADDA359004DA7C0 /* Stat.swift in Sources */,

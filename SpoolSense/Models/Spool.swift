@@ -68,6 +68,18 @@ final class Spool: Identifiable {
         )
     }
     
+    func updateFromRefresh(api: SpoolApi, filament: Filament) {
+        if self.id != api.id { self.id = api.id }
+        if self.filament != filament { self.filament = filament }
+        if self.name != api.name { self.name = api.name }
+        if self.lengthTotal != api.lengthTotal { self.lengthTotal = api.lengthTotal }
+        if self.lengthRemaining != api.lengthRemaining { self.lengthRemaining = api.lengthRemaining }
+        if self.purchasePrice != api.purchasePrice { self.purchasePrice = api.purchasePrice }
+        if self.spoolWeight != api.spoolWeight { self.spoolWeight = api.spoolWeight }
+        if self.totalWeight != api.totalWeight { self.totalWeight = api.totalWeight }
+        if self.color != api.color { self.color = api.color }
+    }
+    
     func uiColor() -> Color {
         self.color?.uiColor() ?? self.filament.color?.uiColor() ?? .gray
     }

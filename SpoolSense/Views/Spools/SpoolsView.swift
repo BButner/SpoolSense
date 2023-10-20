@@ -96,6 +96,9 @@ struct SpoolsView: View {
         }
         .padding()
         .background(Color(.systemGroupedBackground))
+        .refreshable {
+            await mainContext.refreshSpools()
+        }
     }
 }
 

@@ -21,8 +21,33 @@ final class MainViewModel {
         self.api = api
     }
     
-    func loginWithGoogle() async {
-        
+    func refreshFilaments() async {
+        await api.fetchFilaments()
+            .forEach { apiFilament in
+                let existingFilament = filaments.first(where: { $0.id == apiFilament.id })
+                
+                if existingFilament != nil {
+                    existingFilament?.updateFromRefresh(api: apiFilament)
+                } else {
+                    filaments.append(Filament(api: apiFilament))
+                }
+            }
+    }
+    
+    func refreshSpools() async {
+        await api.fetchSpools()
+            .forEach { apiSpool in
+                let existingSpool = spools.first(where: { $0.id == apiSpool.id })
+                let linkedFilament = filaments.first(where: { $0.id == apiSpool.filamentId })
+                
+                if linkedFilament != nil {
+                    if existingSpool != nil {
+                        existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!)
+                    } else {
+                        spools.append(Spool(api: apiSpool, filament: linkedFilament!))
+                    }
+                }
+            }
     }
     
     func loadInitialData() async {

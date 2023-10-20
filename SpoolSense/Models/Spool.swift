@@ -54,6 +54,14 @@ final class Spool: Identifiable {
         self.purchasePrice * self.remainingPct()
     }
     
+    func currentWeightEstimate() -> Double {
+        let weightWithoutSpool = self.totalWeight - self.spoolWeight
+        
+        let gramsPerMeter = weightWithoutSpool / lengthTotal
+        
+        return gramsPerMeter * lengthRemaining
+    }
+    
     func toApi() -> SpoolApi {
         SpoolApi(
             id: self.id,

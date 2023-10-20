@@ -12,7 +12,7 @@ import SwiftUI
 struct ArcView<S>: View where S : ShapeStyle {
     var endAngle: Angle
     var style: S
-    var strokeLineWidth: Double = 10
+    var strokeLineWidth: Double = 8
     @State private var animatedAngle: Angle = .degrees(-90.0)
     
     var animatableData: Angle {

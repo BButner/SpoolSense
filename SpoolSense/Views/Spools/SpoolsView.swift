@@ -45,19 +45,27 @@ struct SpoolsView: View {
                 
                 VStack {
                     HStack {
-                        Stat(title: "Spools", value: mainContext.spools.count.formatted(), icon: Image(systemName: "printer"))
-                        Stat(title: "Weight", value: "3.1 kg", icon: Image(systemName: "scalemass"))
+                        Stat(
+                            title: "Spools",
+                            value: mainContext.spools.count.formatted(),
+                            icon: Image(systemName: "printer")
+                        )
+                        Stat(
+                            title: "Weight", 
+                            value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.currentWeightEstimate() }) / 1000).rounded(toPlaces: 1)) kg",
+                            icon: Image(systemName: "scalemass")
+                        )
                     }
                     
                     HStack {
                         Stat(
                             title: "Distance",
-                            value: "\(((mainContext.spools.reduce(0) { $0 + $1.lengthRemaining }) / 1000).rounded(toPlaces: 1)) km",
+                            value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.lengthRemaining }) / 1000).rounded(toPlaces: 1)) km",
                             icon: Image(systemName: "ruler")
                         )
                         Stat(
                             title: "Value",
-                            value: "$\((mainContext.spools.reduce(0) { $0 + $1.remainingValue() }).rounded(toPlaces: 2))",
+                            value: "~ $\((mainContext.spools.reduce(0) { $0 + $1.remainingValue() }).rounded(toPlaces: 2))",
                             icon: Image(systemName: "dollarsign")
                         )
                     }

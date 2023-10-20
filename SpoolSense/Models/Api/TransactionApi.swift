@@ -11,18 +11,30 @@ import Foundation
 
 class TransactionApi: Codable, Identifiable {
     var id: UUID
+    var userId: UUID
     var spoolId: UUID
+    var sourceId: UUID
     var type: TransactionType
     var date: Date
     var amount: Double // Default in Meters, can be positive or negative
     
     enum CodingKeys: CodingKey {
-        case id, spool_id, type, date, amount
+        case id, user_id, spool_id, source_id, type, date, amount
     }
     
-    init(id: UUID, spoolId: UUID, type: TransactionType, date: Date, amount: Double) {
+    init(
+        id: UUID,
+        userId: UUID,
+        spoolId: UUID,
+        sourceId: UUID,
+        type: TransactionType,
+        date: Date,
+        amount: Double
+    ) {
         self.id = id
+        self.userId = userId
         self.spoolId = spoolId
+        self.sourceId = sourceId
         self.type = type
         self.date = date
         self.amount = amount
@@ -32,7 +44,9 @@ class TransactionApi: Codable, Identifiable {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         
         self.id = try UUID(uuidString: container.decode(String.self, forKey: .id))!
+        self.userId = try UUID(uuidString: container.decode(String.self, forKey: .user_id))!
         self.spoolId = try UUID(uuidString: container.decode(String.self, forKey: .spool_id))!
+        self.sourceId = try UUID(uuidString: container.decode(String.self, forKey: .source_id))!
         self.type = try container.decode(TransactionType.self, forKey: .type)
         self.date = try container.decode(Date.self, forKey: .date)
         self.amount = try container.decode(Double.self, forKey: .amount)
@@ -42,7 +56,9 @@ class TransactionApi: Codable, Identifiable {
         var container = encoder.container(keyedBy: CodingKeys.self)
         
         try container.encode(id, forKey: .id)
+        try container.encode(userId, forKey: .user_id)
         try container.encode(spoolId, forKey: .spool_id)
+        try container.encode(sourceId, forKey: .source_id)
         try container.encode(type, forKey: .type)
         try container.encode(date, forKey: .date)
         try container.encode(amount, forKey: .amount)

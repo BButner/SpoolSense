@@ -12,14 +12,24 @@ import Foundation
 @Observable
 final class Transaction: Identifiable {
     var id: UUID
+    var userId: UUID
     var spoolId: UUID
+    var sourceId: UUID
     var type: TransactionType
     var date: Date
     var amount: Double
     
-    init(spoolId: UUID, type: TransactionType, date: Date, amount: Double) {
+    init(
+        userId: UUID,
+        spoolId: UUID,
+        type: TransactionType,
+        date: Date,
+        amount: Double
+    ) {
         self.id = UUID()
+        self.userId = userId
         self.spoolId = spoolId
+        self.sourceId = userId // Use User ID as the Source ID, as that's the only Source available when creating a transaction in the app
         self.type = type
         self.date = date
         self.amount = amount
@@ -27,7 +37,9 @@ final class Transaction: Identifiable {
     
     init(api: TransactionApi) {
         self.id = api.id
+        self.userId = api.userId
         self.spoolId = api.spoolId
+        self.sourceId = api.sourceId
         self.type = api.type
         self.date = api.date
         self.amount = api.amount
@@ -36,7 +48,9 @@ final class Transaction: Identifiable {
     func toApi() -> TransactionApi {
         TransactionApi(
             id: self.id,
+            userId: self.userId,
             spoolId: self.spoolId,
+            sourceId: self.sourceId,
             type: self.type,
             date: self.date,
             amount: self.amount

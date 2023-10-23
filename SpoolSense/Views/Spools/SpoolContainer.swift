@@ -35,14 +35,17 @@ struct SpoolContainer: View {
             
             ZStack {
                 ArcView(
-                    endAngle: .degrees(270.0), style: spool.uiColor().opacity(0.2)
+                    endAngle: .degrees(360.0), style: spool.uiColor().opacity(0.2)
                 )
-                .frame(width: 50, height: 50)
+                .frame(width: 60, height: 60)
                 
                 ArcView(
-                    endAngle: .degrees((360.0 * spool.remainingPct()) - 90.0), style: spool.uiColor()
+                    endAngle: .degrees((360.0 * spool.remainingPct())), style: spool.uiColor()
                 )
-                .frame(width: 50, height: 50)
+                .frame(width: 60, height: 60)
+                
+                Text(spool.remainingPct().rounded(.down) == 1 ? "Full" : "\((spool.remainingPct() * 100).rounded().formatted())%")
+                    .fontWeight(.bold)
             }
         }
         .padding(14)

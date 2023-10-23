@@ -13,36 +13,49 @@ struct ArcView<S>: View where S : ShapeStyle {
     var endAngle: Angle
     var style: S
     var strokeLineWidth: Double = 8
-    @State private var animatedAngle: Angle = .degrees(-90.0)
-    
-    var animatableData: Angle {
-        get { animatedAngle }
-        set { animatedAngle = newValue }
-    }
+    var animated: Bool = true
+    @State private var animatedAngleDegrees: Double = 0
     
     var body: some View {
         GeometryReader { geometry in
             let radius = min(geometry.size.width, geometry.size.height) / 2
             let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
-
-        Path { path in
-            path.addArc(
-                center: center,
-                radius: radius,
-                startAngle: .degrees(-90),
-                endAngle: animatedAngle,
-                clockwise: false
-            )
-        }
-        .stroke(
-            style,
-            style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .round))
+            
+            ArcShape(center: center, radius: radius, endAngleDegrees: animated ? animatedAngleDegrees : endAngle.degrees)
+                .stroke(
+                    style,
+                    style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .round))
         }
         .onAppear {
-            withAnimation {
-                animatedAngle = endAngle
+            withAnimation(.spring) {
+                animatedAngleDegrees = endAngle.degrees
             }
         }
+    }
+}
+
+struct ArcShape: Shape {
+    var center: CGPoint
+    var radius: Double
+    var endAngleDegrees: Double
+    
+    var animatableData: Double {
+        get { return endAngleDegrees }
+        set { endAngleDegrees = newValue }
+    }
+    
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+        
+        path.addArc(
+            center: center,
+            radius: radius,
+            startAngle: .degrees(-90),
+            endAngle: .degrees(endAngleDegrees - 90),
+            clockwise: false
+        )
+        
+        return path
     }
 }
 

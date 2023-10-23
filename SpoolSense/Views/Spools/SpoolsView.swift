@@ -99,8 +99,22 @@ struct SpoolsView: View {
                 }
             }
             .padding()
-            
-            SpoolList(spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
+                        
+            SpoolList(loading: mainContext.refreshingSpools, spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
+                .overlay {
+                    if mainContext.spools.count == 0 && mainContext.refreshingSpools == false && mainContext.initialDataLoaded == true {
+                        GeometryReader() { _ in
+                            ContentUnavailableView {
+                                Label("No Spools", systemImage: "printer.fill")
+                            } description: {
+                                Text("New Spools you add will appear here.")
+                                    .padding(.top)
+                            }
+                            .opacity(0.7)
+                        }
+                        .background(Color(.systemGroupedBackground))
+                    }
+                }
         }
         .padding()
         .background(Color(.systemGroupedBackground))

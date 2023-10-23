@@ -16,12 +16,17 @@ final class MainViewModel {
     var filaments = [Filament]()
     var spools = [Spool]()
     var session: Session?
+    private(set) var initialDataLoaded: Bool = false
+    private(set) var refreshingFilaments: Bool = false
+    private(set) var refreshingSpools: Bool = false
     
     init(api: SpoolSenseApi) {
         self.api = api
     }
     
     func refreshFilaments() async {
+        refreshingFilaments = true
+        
         await api.fetchFilaments()
             .forEach { apiFilament in
                 let existingFilament = filaments.first(where: { $0.id == apiFilament.id })
@@ -32,9 +37,13 @@ final class MainViewModel {
                     filaments.append(Filament(api: apiFilament))
                 }
             }
+        
+        refreshingFilaments = false
     }
     
     func refreshSpools() async {
+        refreshingSpools = true
+        
         await api.fetchSpools()
             .forEach { apiSpool in
                 let existingSpool = spools.first(where: { $0.id == apiSpool.id })
@@ -48,6 +57,8 @@ final class MainViewModel {
                     }
                 }
             }
+        
+        refreshingSpools = false
     }
     
     func loadInitialData() async {
@@ -67,5 +78,7 @@ final class MainViewModel {
         }.forEach {
             self.spools.append($0)
         }
+        
+        self.initialDataLoaded = true
     }
 }

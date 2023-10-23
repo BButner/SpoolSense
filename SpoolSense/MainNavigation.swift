@@ -66,9 +66,10 @@ enum MenuOptions: Int, CaseIterable {
 
 struct MainNavigation: View {
     @Environment(MainViewModel.self) private var mainContext
+    @State private var selectedTab: Int = 1
     
     var body: some View {
-        TabView {
+        TabView(selection: $selectedTab) {
             ForEach(MenuOptions.allCases, id: \.rawValue) { menuOption in
                 menuOption.view()
                     .tabItem {

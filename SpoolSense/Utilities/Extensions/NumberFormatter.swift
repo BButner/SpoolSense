@@ -10,10 +10,10 @@
 import Foundation
 
 struct NumberFormatterConstants {
-    static func emptyZeroFormatter() -> NumberFormatter {
+    static func emptyZeroFormatter(style: NumberFormatter.Style = .decimal) -> NumberFormatter {
         let formatter = NumberFormatter()
         
-        formatter.numberStyle = .none
+        formatter.numberStyle = .decimal
         formatter.zeroSymbol = ""
         
         return formatter

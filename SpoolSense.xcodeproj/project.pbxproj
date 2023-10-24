@@ -44,6 +44,9 @@
 		8B91D1402AE2C83F0092B46A /* TransactionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */; };
 		8BB198492AE32186006DE5AA /* ArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198482AE32186006DE5AA /* ArcView.swift */; };
 		8BB1984C2AE6E353006DE5AA /* SkeletonUI in Frameworks */ = {isa = PBXBuildFile; productRef = 8BB1984B2AE6E353006DE5AA /* SkeletonUI */; };
+		8BB1984F2AE83B1D006DE5AA /* TextFieldString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1984E2AE83B1D006DE5AA /* TextFieldString.swift */; };
+		8BB198512AE84821006DE5AA /* TextFieldNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198502AE84821006DE5AA /* TextFieldNumber.swift */; };
+		8BB198542AE85851006DE5AA /* AddTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198532AE85851006DE5AA /* AddTransaction.swift */; };
 		8BC1E3262ADF38D300EB95AF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -103,6 +106,9 @@
 		8B91D13B2AE1BD4C0092B46A /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSource.swift; sourceTree = "<group>"; };
 		8BB198482AE32186006DE5AA /* ArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcView.swift; sourceTree = "<group>"; };
+		8BB1984E2AE83B1D006DE5AA /* TextFieldString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldString.swift; sourceTree = "<group>"; };
+		8BB198502AE84821006DE5AA /* TextFieldNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldNumber.swift; sourceTree = "<group>"; };
+		8BB198532AE85851006DE5AA /* AddTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransaction.swift; sourceTree = "<group>"; };
 		8BC1E3242ADF37DE00EB95AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -234,6 +240,7 @@
 		8B14F8862ADD9D50004DA7C0 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				8BB198522AE85842006DE5AA /* Transactions */,
 				8B14F8982ADDA352004DA7C0 /* Misc */,
 				8B14F8902ADD9E14004DA7C0 /* Settings */,
 				8B14F88D2ADD9E03004DA7C0 /* Costs */,
@@ -283,6 +290,8 @@
 			isa = PBXGroup;
 			children = (
 				8B14F8942ADDA2EF004DA7C0 /* AddSpoolView.swift */,
+				8BB1984E2AE83B1D006DE5AA /* TextFieldString.swift */,
+				8BB198502AE84821006DE5AA /* TextFieldNumber.swift */,
 			);
 			path = Add;
 			sourceTree = "<group>";
@@ -312,6 +321,14 @@
 				8B91D1392AE1BA4E0092B46A /* TransactionType.swift */,
 				8B91D13B2AE1BD4C0092B46A /* Transaction.swift */,
 				8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */,
+			);
+			path = Transactions;
+			sourceTree = "<group>";
+		};
+		8BB198522AE85842006DE5AA /* Transactions */ = {
+			isa = PBXGroup;
+			children = (
+				8BB198532AE85851006DE5AA /* AddTransaction.swift */,
 			);
 			path = Transactions;
 			sourceTree = "<group>";
@@ -457,6 +474,7 @@
 			files = (
 				8B14F8922ADD9E1D004DA7C0 /* SettingsView.swift in Sources */,
 				8B14F8792ADD99F7004DA7C0 /* Material.swift in Sources */,
+				8BB198512AE84821006DE5AA /* TextFieldNumber.swift in Sources */,
 				8B14F87B2ADD9A0F004DA7C0 /* Filament.swift in Sources */,
 				8B14F8892ADD9DEF004DA7C0 /* SpoolsView.swift in Sources */,
 				8B14F88F2ADD9E0C004DA7C0 /* CostsView.swift in Sources */,
@@ -467,6 +485,7 @@
 				8B91D1342ADF53380092B46A /* MainNavigation.swift in Sources */,
 				8B14F8A32ADDA596004DA7C0 /* SpoolSheet.swift in Sources */,
 				8B91D13A2AE1BA4E0092B46A /* TransactionType.swift in Sources */,
+				8BB198542AE85851006DE5AA /* AddTransaction.swift in Sources */,
 				8B14F89F2ADDA4C6004DA7C0 /* SpoolList.swift in Sources */,
 				8B14F8442ADD9834004DA7C0 /* ContentView.swift in Sources */,
 				8B14F8422ADD9834004DA7C0 /* SpoolSenseApp.swift in Sources */,
@@ -479,6 +498,7 @@
 				8BB198492AE32186006DE5AA /* ArcView.swift in Sources */,
 				8B14F8772ADD99CB004DA7C0 /* SpoolApi.swift in Sources */,
 				8B14F88C2ADD9DFE004DA7C0 /* FilamentsView.swift in Sources */,
+				8BB1984F2AE83B1D006DE5AA /* TextFieldString.swift in Sources */,
 				8B91D1362ADF53EA0092B46A /* LoginView.swift in Sources */,
 				8B14F8712ADD9966004DA7C0 /* SpoolSenseApi.swift in Sources */,
 				8B3BE4102ADEF17E00C0420C /* NumberFormatter.swift in Sources */,

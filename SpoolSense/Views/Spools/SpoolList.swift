@@ -66,20 +66,20 @@ struct SpoolList: View {
                         Spacer()
                         
                         ZStack {
-                            ArcView(
-                                endAngle: .degrees(360.0), style: spool?.uiColor().opacity(0.2) ?? Color(.systemGroupedBackground)
-                            )
-                            .frame(width: 60, height: 60)
-                            
-                            ArcView(
-                                endAngle: .degrees((360.0 * (spool?.remainingPct() ?? 1))), style: spool?.uiColor() ?? Color(.systemGroupedBackground)
-                            )
-                            .frame(width: 60, height: 60)
-                            
-                            Text((spool?.remainingPct().rounded(.down) ?? 0) == 1 ? "Full" : "\(((spool?.remainingPct() ?? 0) * 100).rounded().formatted())%")
-                                .fontWeight(.bold)
+                            if !loading {
+                                ArcView(
+                                    endAngle: .degrees(360.0), style: spool?.uiColor().opacity(0.2) ?? Color(.systemGroupedBackground)
+                                )
+                                
+                                ArcView(
+                                    endAngle: .degrees((360.0 * (spool?.remainingPct() ?? 1))), style: spool?.uiColor() ?? Color(.systemGroupedBackground)
+                                )
+                                
+                                Text((spool?.remainingPct().rounded(.down) ?? 0) == 1 ? "Full" : "\(((spool?.remainingPct() ?? 0) * 100).rounded().formatted())%")
+                                    .fontWeight(.bold)
+                            }
                         }
-                        .opacity(loading ? 0 : 1)
+                        .frame(width: 60, height: 60)
                     }
                     .padding(14)
                     .background(Color(.secondarySystemGroupedBackground))

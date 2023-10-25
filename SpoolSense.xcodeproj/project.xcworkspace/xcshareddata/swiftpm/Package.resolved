@@ -1,6 +1,15 @@
 {
   "pins" : [
     {
+      "identity" : "customkeyboardkit",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/paescebu/CustomKeyboardKit",
+      "state" : {
+        "revision" : "3d31b6b3a127a10a5482b66eada97e51720c09b0",
+        "version" : "1.0.0"
+      }
+    },
+    {
       "identity" : "functions-swift",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/supabase-community/functions-swift",
@@ -106,6 +115,15 @@
       "state" : {
         "revision" : "ffa3cd6fc2aa62adbedd31d3efaf7c0d86a9f029",
         "version" : "509.0.1"
+      }
+    },
+    {
+      "identity" : "swiftui-introspect",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/siteline/SwiftUI-Introspect.git",
+      "state" : {
+        "revision" : "ccb973cfff703cba53fb88197413485c060eb26b",
+        "version" : "0.10.0"
       }
     },
     {

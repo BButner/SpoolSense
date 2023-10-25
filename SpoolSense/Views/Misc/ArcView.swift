@@ -10,6 +10,7 @@
 import SwiftUI
 
 struct ArcView<S>: View where S : ShapeStyle {
+    var length: Double
     var endAngle: Angle
     var style: S
     var strokeLineWidth: Double = 8
@@ -17,20 +18,21 @@ struct ArcView<S>: View where S : ShapeStyle {
     @State private var animatedAngleDegrees: Double = 0
     
     var body: some View {
-        GeometryReader { geometry in
-            let radius = min(geometry.size.width, geometry.size.height) / 2
-            let center = CGPoint(x: geometry.size.width / 2, y: geometry.size.height / 2)
-            
-            ArcShape(center: center, radius: radius, endAngleDegrees: animated ? animatedAngleDegrees : endAngle.degrees)
-                .stroke(
-                    style,
-                    style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .round))
-        }
-        .onAppear {
-            withAnimation(.spring) {
-                animatedAngleDegrees = endAngle.degrees
+        ArcShape(center: CGPoint(x: length / 2, y: length / 2), radius: length / 2, endAngleDegrees: animated ? animatedAngleDegrees : endAngle.degrees)
+            .size(width: length, height: length)
+            .stroke(
+                style,
+                style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .round)
+            )
+//            .shadow(color: .indigo.opacity(0.4), radius: animatedAngleDegrees == endAngle.degrees ? 6 : 0)
+            .frame(width: length, height: length)
+            .onChange(of: endAngle, initial: true) {
+                withAnimation(.easeInOut) {
+                    animatedAngleDegrees = endAngle.degrees < 0 
+                    ? 0
+                    : endAngle.degrees > 360 ? 360 : endAngle.degrees
+                }
             }
-        }
     }
 }
 
@@ -60,6 +62,5 @@ struct ArcShape: Shape {
 }
 
 #Preview {
-    ArcView(endAngle: .degrees(156.0), style: .blue)
-        .frame(width: 100, height: 100)
+    ArcView(length: 100, endAngle: .degrees(156.0), style: .blue)
 }

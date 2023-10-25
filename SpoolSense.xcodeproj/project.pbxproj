@@ -47,6 +47,7 @@
 		8BB1984F2AE83B1D006DE5AA /* TextFieldString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1984E2AE83B1D006DE5AA /* TextFieldString.swift */; };
 		8BB198512AE84821006DE5AA /* TextFieldNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198502AE84821006DE5AA /* TextFieldNumber.swift */; };
 		8BB198542AE85851006DE5AA /* AddTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198532AE85851006DE5AA /* AddTransaction.swift */; };
+		8BB198572AE859B2006DE5AA /* CustomKeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BB198562AE859B2006DE5AA /* CustomKeyboardKit */; };
 		8BC1E3262ADF38D300EB95AF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */; };
 /* End PBXBuildFile section */
 
@@ -120,6 +121,7 @@
 			files = (
 				8B14F86D2ADD98F9004DA7C0 /* Supabase in Frameworks */,
 				8BB1984C2AE6E353006DE5AA /* SkeletonUI in Frameworks */,
+				8BB198572AE859B2006DE5AA /* CustomKeyboardKit in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -352,6 +354,7 @@
 			packageProductDependencies = (
 				8B14F86C2ADD98F9004DA7C0 /* Supabase */,
 				8BB1984B2AE6E353006DE5AA /* SkeletonUI */,
+				8BB198562AE859B2006DE5AA /* CustomKeyboardKit */,
 			);
 			productName = SpoolSense;
 			productReference = 8B14F83E2ADD9834004DA7C0 /* SpoolSense.app */;
@@ -428,6 +431,7 @@
 			packageReferences = (
 				8B14F86B2ADD98F9004DA7C0 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 				8BB1984A2AE6E353006DE5AA /* XCRemoteSwiftPackageReference "SkeletonUI" */,
+				8BB198552AE859B2006DE5AA /* XCRemoteSwiftPackageReference "CustomKeyboardKit" */,
 			);
 			productRefGroup = 8B14F83F2ADD9834004DA7C0 /* Products */;
 			projectDirPath = "";
@@ -854,6 +858,14 @@
 				minimumVersion = 2.0.0;
 			};
 		};
+		8BB198552AE859B2006DE5AA /* XCRemoteSwiftPackageReference "CustomKeyboardKit" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/paescebu/CustomKeyboardKit";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -866,6 +878,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 8BB1984A2AE6E353006DE5AA /* XCRemoteSwiftPackageReference "SkeletonUI" */;
 			productName = SkeletonUI;
+		};
+		8BB198562AE859B2006DE5AA /* CustomKeyboardKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 8BB198552AE859B2006DE5AA /* XCRemoteSwiftPackageReference "CustomKeyboardKit" */;
+			productName = CustomKeyboardKit;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

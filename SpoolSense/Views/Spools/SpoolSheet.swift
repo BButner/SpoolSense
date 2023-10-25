@@ -11,6 +11,7 @@ import SwiftUI
 
 struct SpoolSheet: View {
     @Binding var selectedSpool: Spool?
+    @State private var showAddTransaction: Bool = false
     
     var body: some View {
         if selectedSpool == nil {
@@ -66,6 +67,17 @@ struct SpoolSheet: View {
                         Text("You have \(selectedSpool!.lengthRemaining.rounded(.down).formatted())m of filament remaining out of \(selectedSpool!.lengthTotal.rounded(.down).formatted())m")
                             .font(.footnote)
                             .foregroundStyle(.secondary)
+                    }
+                    
+                    Button("Test") {
+                        withAnimation {
+                            showAddTransaction.toggle()
+                        }
+                    }
+                    .sheet(isPresented: $showAddTransaction, onDismiss: {
+                    }) {
+                        AddTransaction(spool: selectedSpool!)
+                            .presentationDragIndicator(.visible)
                     }
                 }
             }

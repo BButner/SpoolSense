@@ -68,11 +68,11 @@ struct SpoolList: View {
                         ZStack {
                             if !loading {
                                 ArcView(
-                                    endAngle: .degrees(360.0), style: spool?.uiColor().opacity(0.2) ?? Color(.systemGroupedBackground)
+                                    length: 60, endAngle: .degrees(360.0), style: spool?.uiColor().opacity(0.2) ?? Color(.systemGroupedBackground)
                                 )
                                 
                                 ArcView(
-                                    endAngle: .degrees((360.0 * (spool?.remainingPct() ?? 1))), style: spool?.uiColor() ?? Color(.systemGroupedBackground)
+                                    length: 60, endAngle: .degrees((360.0 * (spool?.remainingPct() ?? 1))), style: spool?.uiColor() ?? Color(.systemGroupedBackground)
                                 )
                                 
                                 Text((spool?.remainingPct().rounded(.down) ?? 0) == 1 ? "Full" : "\(((spool?.remainingPct() ?? 0) * 100).rounded().formatted())%")

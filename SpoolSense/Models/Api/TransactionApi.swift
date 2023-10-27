@@ -17,9 +17,10 @@ class TransactionApi: Codable, Identifiable {
     var type: TransactionType
     var date: Date
     var amount: Double // Default in Meters, can be positive or negative
+    var description: String
     
     enum CodingKeys: CodingKey {
-        case id, user_id, spool_id, source_id, type, date, amount
+        case id, user_id, spool_id, source_id, type, date, amount, description
     }
     
     init(
@@ -29,7 +30,8 @@ class TransactionApi: Codable, Identifiable {
         sourceId: UUID,
         type: TransactionType,
         date: Date,
-        amount: Double
+        amount: Double,
+        description: String
     ) {
         self.id = id
         self.userId = userId
@@ -38,6 +40,7 @@ class TransactionApi: Codable, Identifiable {
         self.type = type
         self.date = date
         self.amount = amount
+        self.description = description
     }
     
     required init(from decoder: Decoder) throws {
@@ -50,6 +53,7 @@ class TransactionApi: Codable, Identifiable {
         self.type = try container.decode(TransactionType.self, forKey: .type)
         self.date = try container.decode(Date.self, forKey: .date)
         self.amount = try container.decode(Double.self, forKey: .amount)
+        self.description = try container.decode(String.self, forKey: .description)
     }
     
     func encode(to encoder: Encoder) throws {
@@ -62,5 +66,6 @@ class TransactionApi: Codable, Identifiable {
         try container.encode(type, forKey: .type)
         try container.encode(date, forKey: .date)
         try container.encode(amount, forKey: .amount)
+        try container.encode(description, forKey: .description)
     }
 }

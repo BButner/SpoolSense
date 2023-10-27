@@ -42,17 +42,50 @@ struct AddSpoolView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                VStack(alignment: .leading, spacing: 30) {
-                    HStack {
-                        Spacer()
-                        Text("Add Spool")
-                            .font(.largeTitle)
-                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                        Spacer()
-                    }
+                ZStack {
+                    LinearGradient(gradient: Gradient(colors: [color.uiColor()]), startPoint: .bottom, endPoint: .top)
+                      .mask(
+                        Circle()
+                          .frame(width: 100, height: 100)
+                          .blur(radius: 100)
+                        )
                     
-                    TextFieldString(title: "Spool Name", text: $spoolName, isInvalid: spoolName.isEmpty, errorMessage: "cannot be empty")
-                    TextFieldNumber(title: "Purchase Price", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter(style: .currency), isInvalid: purchasePrice.isZero || purchasePrice.isLess(than: 0), errorMessage: "cannot be zero")
+                    VStack(alignment: .leading, spacing: 30) {
+                        HStack {
+                            Spacer()
+                            Text("Add Spool")
+                                .font(.largeTitle)
+                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                            Spacer()
+                        }
+                        
+                        TextFieldString(title: "Spool Name", text: $spoolName, isInvalid: spoolName.isEmpty, errorMessage: "cannot be empty")
+                        TextFieldNumber(title: "Purchase Price", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter(style: .currency), isInvalid: purchasePrice.isZero || purchasePrice.isLess(than: 0), errorMessage: "cannot be zero")
+                        
+                        Picker("Filament", selection: $filament) {
+                            ForEach(selectableFilaments) { filament in
+                                Text(filament.isUnselectedView ? "Select a Filament" : "\(filament.brand) - \(filament.name)")
+                                    .tag(filament)
+                            }
+                        }
+                        .pickerStyle(.navigationLink)
+
+                        Picker(filament.color == nil ? "Color (Required)" : "Color (Optional)", selection: $color) {
+                            ForEach(ChoosableColor.allCases, id: \.rawValue) { c in
+                                HStack(alignment: .center) {
+                                    if (c != ChoosableColor.unselected) {
+                                        Rectangle()
+                                            .fill(c.uiColor())
+                                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                            .frame(width: 32, height: 4)
+                                    }
+
+                                    Text(c.rawValue)
+                                }
+                                .tag(c)
+                            }
+                        }
+                    }
                 }
             }
             .padding()

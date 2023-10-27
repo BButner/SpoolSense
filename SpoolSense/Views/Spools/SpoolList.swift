@@ -20,12 +20,13 @@ struct SpoolList: View {
     var body: some View {
         VStack {
             SkeletonForEach(with: spools, quantity: 5) { loading, spool in
-                Button {
-                    selectedSpool = spool
-                    withAnimation {
-                        showSheet.toggle()
-                    }
-                } label: {
+                //                Button {
+                //                    selectedSpool = spool
+                //                    withAnimation {
+                //                        showSheet.toggle()
+                //                    }
+                //                } label: {
+                NavigationLink(value: spool) {
                     HStack(alignment: .center, spacing: 14) {
                         VStack(alignment: .leading) {
                             Text("\(spool?.filament.brand ?? "") - \(spool?.filament.name ?? "")")
@@ -85,13 +86,19 @@ struct SpoolList: View {
                     .background(Color(.secondarySystemGroupedBackground))
                     .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
                 }
-                .foregroundStyle(.primary)
-                .sheet(isPresented: $showSheet, onDismiss: {
-                }) {
-                    SpoolSheet(selectedSpool: $selectedSpool)
-                        .presentationDragIndicator(.visible)
-                }
             }
+            .foregroundStyle(.primary)
+            .navigationDestination(for: Spool.self) { spool in
+                SpoolSheet(selectedSpool: spool)
+                    .navigationTitle(spool.name)
+                    .navigationBarTitleDisplayMode(.inline)
+            }
+            //                .sheet(isPresented: $showSheet, onDismiss: {
+            //                }) {
+            //                    SpoolSheet(selectedSpool: $selectedSpool)
+            //                        .presentationDragIndicator(.visible)
+            //                }
+            //            }
         }
     }
 }

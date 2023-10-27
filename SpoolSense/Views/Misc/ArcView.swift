@@ -9,10 +9,11 @@
 
 import SwiftUI
 
-struct ArcView<S>: View where S : ShapeStyle {
+struct ArcView: View {
+    @Environment(\.isEnabled) var isEnabled
     var length: Double
     var endAngle: Angle
-    var style: S
+    var style: Color
     var strokeLineWidth: Double = 8
     var animated: Bool = true
     @State private var animatedAngleDegrees: Double = 0
@@ -21,10 +22,9 @@ struct ArcView<S>: View where S : ShapeStyle {
         ArcShape(center: CGPoint(x: length / 2, y: length / 2), radius: length / 2, endAngleDegrees: animated ? animatedAngleDegrees : endAngle.degrees)
             .size(width: length, height: length)
             .stroke(
-                style,
+                isEnabled ? style : .gray,
                 style: StrokeStyle(lineWidth: strokeLineWidth, lineCap: .round)
             )
-//            .shadow(color: .indigo.opacity(0.4), radius: animatedAngleDegrees == endAngle.degrees ? 6 : 0)
             .frame(width: length, height: length)
             .onChange(of: endAngle, initial: true) {
                 withAnimation(.easeInOut) {

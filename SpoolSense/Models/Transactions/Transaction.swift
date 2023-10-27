@@ -18,13 +18,15 @@ final class Transaction: Identifiable {
     var type: TransactionType
     var date: Date
     var amount: Double
+    var description: String
     
     init(
         userId: UUID,
         spoolId: UUID,
         type: TransactionType,
         date: Date,
-        amount: Double
+        amount: Double,
+        description: String
     ) {
         self.id = UUID()
         self.userId = userId
@@ -33,6 +35,7 @@ final class Transaction: Identifiable {
         self.type = type
         self.date = date
         self.amount = amount
+        self.description = description
     }
     
     init(api: TransactionApi) {
@@ -43,6 +46,7 @@ final class Transaction: Identifiable {
         self.type = api.type
         self.date = api.date
         self.amount = api.amount
+        self.description = api.description
     }
     
     func toApi() -> TransactionApi {
@@ -53,7 +57,8 @@ final class Transaction: Identifiable {
             sourceId: self.sourceId,
             type: self.type,
             date: self.date,
-            amount: self.amount
+            amount: self.amount,
+            description: self.description
         )
     }
 }

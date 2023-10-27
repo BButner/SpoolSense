@@ -49,6 +49,8 @@
 		8BB198542AE85851006DE5AA /* AddTransaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198532AE85851006DE5AA /* AddTransaction.swift */; };
 		8BB198572AE859B2006DE5AA /* CustomKeyboardKit in Frameworks */ = {isa = PBXBuildFile; productRef = 8BB198562AE859B2006DE5AA /* CustomKeyboardKit */; };
 		8BC1E3262ADF38D300EB95AF /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */; };
+		8BE342A62AE9BCF30098FFB1 /* DragConfirm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE342A52AE9BCF30098FFB1 /* DragConfirm.swift */; };
+		8BE342A82AEC22D80098FFB1 /* Math.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BE342A72AEC22D80098FFB1 /* Math.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -112,6 +114,8 @@
 		8BB198532AE85851006DE5AA /* AddTransaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransaction.swift; sourceTree = "<group>"; };
 		8BC1E3242ADF37DE00EB95AF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BC1E3252ADF38D300EB95AF /* Launch Screen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
+		8BE342A52AE9BCF30098FFB1 /* DragConfirm.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DragConfirm.swift; sourceTree = "<group>"; };
+		8BE342A72AEC22D80098FFB1 /* Math.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Math.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -235,6 +239,7 @@
 			children = (
 				8B14F89B2ADDA421004DA7C0 /* Extensions */,
 				8B14F87F2ADD9AA0004DA7C0 /* SpoolSenseError.swift */,
+				8BE342A72AEC22D80098FFB1 /* Math.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -303,6 +308,7 @@
 			children = (
 				8B14F8992ADDA359004DA7C0 /* Stat.swift */,
 				8BB198482AE32186006DE5AA /* ArcView.swift */,
+				8BE342A52AE9BCF30098FFB1 /* DragConfirm.swift */,
 			);
 			path = Misc;
 			sourceTree = "<group>";
@@ -480,6 +486,7 @@
 				8B14F8792ADD99F7004DA7C0 /* Material.swift in Sources */,
 				8BB198512AE84821006DE5AA /* TextFieldNumber.swift in Sources */,
 				8B14F87B2ADD9A0F004DA7C0 /* Filament.swift in Sources */,
+				8BE342A62AE9BCF30098FFB1 /* DragConfirm.swift in Sources */,
 				8B14F8892ADD9DEF004DA7C0 /* SpoolsView.swift in Sources */,
 				8B14F88F2ADD9E0C004DA7C0 /* CostsView.swift in Sources */,
 				8B91D1382AE1BA420092B46A /* TransactionApi.swift in Sources */,
@@ -499,6 +506,7 @@
 				8B14F89A2ADDA359004DA7C0 /* Stat.swift in Sources */,
 				8B14F87D2ADD9A45004DA7C0 /* Spool.swift in Sources */,
 				8B14F8732ADD9991004DA7C0 /* FilamentApi.swift in Sources */,
+				8BE342A82AEC22D80098FFB1 /* Math.swift in Sources */,
 				8BB198492AE32186006DE5AA /* ArcView.swift in Sources */,
 				8B14F8772ADD99CB004DA7C0 /* SpoolApi.swift in Sources */,
 				8B14F88C2ADD9DFE004DA7C0 /* FilamentsView.swift in Sources */,

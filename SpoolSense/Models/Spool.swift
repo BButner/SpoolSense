@@ -11,7 +11,7 @@ import Foundation
 import SwiftUI
 
 @Observable
-final class Spool: Identifiable {
+final class Spool: Identifiable, Hashable {
     var id: UUID
     var filament: Filament
     var name: String
@@ -90,6 +90,18 @@ final class Spool: Identifiable {
     
     func uiColor() -> Color {
         self.color?.uiColor() ?? self.filament.color?.uiColor() ?? .gray
+    }
+    
+    static func == (lhs: Spool, rhs: Spool) -> Bool {
+        lhs.id == rhs.id
+    }
+    
+    var identifier: String {
+        return self.id.uuidString
+    }
+    
+    public func hash(into hasher: inout Hasher) {
+        return hasher.combine(identifier)
     }
 }
 

@@ -18,108 +18,88 @@ struct SpoolsView: View {
     @AppStorage("spoolsSortBy") var sortBy: SpoolSortOptions = .name
         
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading) {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading) {
+                    VStack {
+                        HStack {
+                            Stat(
+                                title: "Spools",
+                                value: mainContext.spools.count.formatted(),
+                                icon: Image(systemName: "printer")
+                            )
+                            Stat(
+                                title: "Weight", 
+                                value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.currentWeightEstimate() }) / 1000).rounded(toPlaces: 1)) kg",
+                                icon: Image(systemName: "scalemass")
+                            )
+                        }
+                        
+                        HStack {
+                            Stat(
+                                title: "Distance",
+                                value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.lengthRemaining }) / 1000).rounded(toPlaces: 1)) km",
+                                icon: Image(systemName: "ruler")
+                            )
+                            Stat(
+                                title: "Value",
+                                value: "~ $\((mainContext.spools.reduce(0) { $0 + $1.remainingValue() }).rounded(toPlaces: 2))",
+                                icon: Image(systemName: "dollarsign")
+                            )
+                        }
+                    }
+                }
+                
                 HStack {
-                    Text("My Spools")
-                        .font(.largeTitle)
-                        .fontWeight(.semibold)
-                    
                     Spacer()
                     
-                    Button {
-                        withAnimation {
-                            showAddView.toggle()
+                    Menu {
+                        Picker("Sort", selection: $sortBy.onChange(onSortByChanged).animation(.interactiveSpring)) {
+                            ForEach(SpoolSortOptions.allCases, id: \.rawValue) { option in
+                                HStack {
+                                    Text(option.title)
+                                    
+                                    Spacer()
+                                    
+                                    if sortBy.rawValue == option.rawValue {
+                                        Image(systemName: isAscending ? "chevron.up" : "chevron.down")
+                                    }
+                                }
+                                .tag(option)
+                            }
                         }
                     } label: {
-                        Image(systemName: "plus.circle.fill")
+                        Image(systemName: "line.3.horizontal.decrease.circle")
                             .resizable()
                             .scaledToFit()
-                            .frame(width: 32, height: 32)
+                            .frame(width: 25, height: 25)
                             .tint(.primary)
                     }
-                    .sheet(isPresented: $showAddView)  {
-                        AddSpoolView(showAddView: $showAddView, selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)
-                    }
                 }
+                .padding()
                 
-                VStack {
-                    HStack {
-                        Stat(
-                            title: "Spools",
-                            value: mainContext.spools.count.formatted(),
-                            icon: Image(systemName: "printer")
-                        )
-                        Stat(
-                            title: "Weight", 
-                            value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.currentWeightEstimate() }) / 1000).rounded(toPlaces: 1)) kg",
-                            icon: Image(systemName: "scalemass")
-                        )
-                    }
-                    
-                    HStack {
-                        Stat(
-                            title: "Distance",
-                            value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.lengthRemaining }) / 1000).rounded(toPlaces: 1)) km",
-                            icon: Image(systemName: "ruler")
-                        )
-                        Stat(
-                            title: "Value",
-                            value: "~ $\((mainContext.spools.reduce(0) { $0 + $1.remainingValue() }).rounded(toPlaces: 2))",
-                            icon: Image(systemName: "dollarsign")
-                        )
-                    }
-                }
-            }
-            
-            HStack {
-                Spacer()
-                
-                Menu {
-                    Picker("Sort", selection: $sortBy.onChange(onSortByChanged).animation(.interactiveSpring)) {
-                        ForEach(SpoolSortOptions.allCases, id: \.rawValue) { option in
-                            HStack {
-                                Text(option.title)
-                                
-                                Spacer()
-                                
-                                if sortBy.rawValue == option.rawValue {
-                                    Image(systemName: isAscending ? "chevron.up" : "chevron.down")
+                SpoolList(loading: mainContext.refreshingSpools, spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
+                    .overlay {
+                        if mainContext.spools.count == 0 && mainContext.refreshingSpools == false && mainContext.initialDataLoaded == true {
+                            GeometryReader() { _ in
+                                ContentUnavailableView {
+                                    Label("No Spools", systemImage: "printer.fill")
+                                } description: {
+                                    Text("New Spools you add will appear here.")
+                                        .padding(.top)
                                 }
+                                .opacity(0.7)
                             }
-                            .tag(option)
+                            .background(Color(.systemGroupedBackground))
                         }
                     }
-                } label: {
-                    Image(systemName: "line.3.horizontal.decrease.circle")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 25, height: 25)
-                        .tint(.primary)
-                }
             }
             .padding()
-                        
-            SpoolList(loading: mainContext.refreshingSpools, spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
-                .overlay {
-                    if mainContext.spools.count == 0 && mainContext.refreshingSpools == false && mainContext.initialDataLoaded == true {
-                        GeometryReader() { _ in
-                            ContentUnavailableView {
-                                Label("No Spools", systemImage: "printer.fill")
-                            } description: {
-                                Text("New Spools you add will appear here.")
-                                    .padding(.top)
-                            }
-                            .opacity(0.7)
-                        }
-                        .background(Color(.systemGroupedBackground))
-                    }
-                }
-        }
-        .padding()
-        .background(Color(.systemGroupedBackground))
-        .refreshable {
-            await mainContext.refreshSpools()
+            .background(Color(.systemGroupedBackground))
+            .refreshable {
+                await mainContext.refreshSpools()
+            }
+            .navigationTitle("My Spools")
         }
     }
 }

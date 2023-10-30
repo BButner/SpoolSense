@@ -10,6 +10,8 @@
 import SwiftUI
 
 struct DragConfirm: View {
+    @Environment(\.isEnabled) var isEnabled
+    
     var text: String
     @Binding var isLoading: Bool
     @Binding var isComplete: Bool
@@ -27,25 +29,28 @@ struct DragConfirm: View {
                 HStack {
                     Spacer()
                     Text(text)
-                        .foregroundStyle(.indigo.opacity(0.8))
+                        .foregroundStyle(isEnabled ? .indigo.opacity(0.8) : .gray.opacity(0.8))
                     Spacer()
                 }
                 .opacity(isLoading ? 0 : 1)
                 .animation(defaultAnimation, value: isLoading)
+                .animation(defaultAnimation, value: isEnabled)
                 
                 Rectangle()
                     .fill(
-                        isLoading
-                        ? .indigo
+                        isLoading && isEnabled
+                        ? isLoading ? .indigo
                         : .indigo.opacity(offset.width / (geometry.size.width - buttonLength))
+                        : .clear
                     )
                     .clipShape(RoundedRectangle(cornerRadius: isLoading ? buttonLength : cornerRadius))
                     .frame(width: buttonLength + buttonPadding + (isLoading ? 0 : offset.width))
                     .animation(defaultAnimation, value: isLoading)
+                    .animation(defaultAnimation, value: isEnabled)
                 
                 Image(systemName: "chevron.right")
                     .frame(width: buttonLength, height: buttonLength)
-                    .background(.indigo)
+                    .background(isEnabled ? .indigo : .gray)
                     .clipShape(RoundedRectangle(cornerRadius: isLoading ? buttonLength : cornerRadius - 2))
                     .frame(width: buttonLength, height: buttonLength)
                     .offset(x: offset.width, y: 0)
@@ -78,6 +83,7 @@ struct DragConfirm: View {
                     .opacity(isLoading ? 0 : 1)
                     .scaleEffect(isLoading ? 0.8 : 1)
                     .animation(defaultAnimation, value: isLoading)
+                    .animation(defaultAnimation, value: isEnabled)
                 
                 ProgressView()
                     .progressViewStyle(.circular)
@@ -85,7 +91,7 @@ struct DragConfirm: View {
                     .opacity(isLoading && !isComplete ? 1 : 0)
                     .offset(x: offset.width, y: 0)
                     .animation(defaultAnimation, value: isLoading)
-                    .animation(defaultAnimation, value: isComplete)
+                    .animation(.interactiveSpring, value: isComplete)
                     .tint(.white)
                 
                 Image(systemName: "hand.thumbsup.fill")
@@ -97,15 +103,16 @@ struct DragConfirm: View {
                     .padding(6)
                     .opacity(isComplete ? 1 : 0)
                     .scaleEffect(isComplete ? 1 : 0)
-                    .animation(defaultAnimation, value: isComplete)
+                    .animation(.interactiveSpring, value: isComplete)
             }
         }
         .frame(height: buttonLength + buttonPadding, alignment: .center)
         .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-        .background(isLoading ? .clear : .indigo.opacity(0.1))
+        .background(isLoading ? .clear : isEnabled ? .indigo.opacity(0.1) : .gray.opacity(0.1))
         .animation(.easeInOut(duration: 0.0), value: isLoading)
         .clipShape(RoundedRectangle(cornerRadius: isLoading ? buttonLength : cornerRadius))
         .animation(defaultAnimation, value: isLoading)
+        .animation(defaultAnimation, value: isEnabled)
     }
 }
 

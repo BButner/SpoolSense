@@ -102,4 +102,20 @@ final class SpoolSenseApi {
             return []
         }
     }
+    
+    func insertTransaction(transaction: TransactionApi) async -> Bool {
+        let query = client.database
+            .from("transactions_dev")
+            .insert(values: transaction, returning: .representation)
+            .select()
+            .single()
+        
+        do {
+            let response: SpoolApi = try await query.execute().value
+            return response.id == transaction.id
+        } catch {
+            print("Error when Inserting Transaction: \(error)")
+            return false
+        }
+    }
 }

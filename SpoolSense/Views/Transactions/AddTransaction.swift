@@ -49,11 +49,21 @@ struct AddTransaction: View {
     @State private var isLoading: Bool = false
     @State private var isFinishedAdding: Bool = false
     
-    let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.numberStyle = .decimal
-        return formatter
-    }()
+    var amountErrorMessage: String? {
+        if amount == 0 {
+            return "Please enter an amount"
+        }
+        
+        if newPctRemaining > 1 {
+            return "Amount would overfill Spool"
+        }
+        
+        if newPctRemaining < 0 {
+            return "Amount results in negative Spool value"
+        }
+        
+        return nil
+    }
     
     private var newPctRemaining: Double {
         get { return (mode == .consume ? (spool.lengthRemaining - amount) : (spool.lengthRemaining + amount)) / spool.lengthTotal }
@@ -146,42 +156,37 @@ struct AddTransaction: View {
                             .foregroundStyle(.secondary)
                     }
                     
-                    HStack(alignment: .lastTextBaseline) {
-                        HStack {
-                            Image(systemName: mode == .consume ? "minus" : "plus")
+                    VStack {
+                        Text(amountErrorMessage == nil ? " " : amountErrorMessage!)
+                            .font(.callout)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.red)
+                            .animation(.easeInOut, value: amountErrorMessage)
+                        
+                        HStack(alignment: .lastTextBaseline) {
+                            HStack {
+                                Image(systemName: mode == .consume ? "minus" : "plus")
+                                    .font(.title)
+                                    .fontWeight(.semibold)
+                                    .frame(width: 24)
+                                
+                                TextField("0", value: $amount, formatter: NumberFormatterConstants.emptyZeroFormatter())
+                                    .focused($focusedField, equals: .amount)
+                                    .fixedSize()
+                                    .font(.system(size: 42))
+                                    .fontWeight(.semibold)
+                                    .keyboardType(.decimalPad)
+                                    .textSelection(.disabled)
+                            }
+                            
+                            Text("m")
                                 .font(.title)
                                 .fontWeight(.semibold)
-                                .frame(width: 24)
-                            
-                            TextField("", value: $amount, formatter: formatter)
-                                .focused($focusedField, equals: .amount)
-                                .fixedSize()
-                                .font(.system(size: 42))
-                                .fontWeight(.semibold)
-                                .keyboardType(.decimalPad)
+                                .foregroundStyle(.indigo)
                         }
-                        
-                        Text("m")
-                            .font(.title)
-                            .fontWeight(.semibold)
-                            .foregroundStyle(.indigo)
                     }
                     
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("DESCRIPTION")
-                            .font(.system(size: 12, weight: .regular))
-                            .foregroundColor(.gray)
-                            .padding(.leading)
-                        
-                        TextField("What's this for?", text: $description)
-                            .font(.system(size: 15, weight: .regular))
-                            .foregroundColor(.primary)
-                            .padding(.horizontal)
-                            .frame(height: 44, alignment: .center)
-                            .background(Color(.secondarySystemGroupedBackground))
-                            .cornerRadius(10)
-                    }
-                    .padding(.horizontal)
+                    TextFieldString(header: "Description", title: "What's this for?", text: $description, isInvalid: description.isEmpty, errorMessage: "cannot be empty")
                 }
                 
                 Spacer()
@@ -221,6 +226,7 @@ struct AddTransaction: View {
                                     }
                                 }
                                 .frame(width: geometry.size.width)
+                                .disabled(amountErrorMessage != nil || description.isEmpty)
                         }
                     }
                     .fixedSize()
@@ -260,7 +266,6 @@ struct AddTransaction: View {
                 .fixedSize()
                 .frame(width: geometry.size.width, height: geometry.size.height)
             }
-//            .ignoresSafeArea()
         }
         .background(Color(.systemGroupedBackground))
         .onAppear {

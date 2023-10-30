@@ -59,8 +59,8 @@ struct AddSpoolView: View {
                             Spacer()
                         }
                         
-                        TextFieldString(title: "Spool Name", text: $spoolName, isInvalid: spoolName.isEmpty, errorMessage: "cannot be empty")
-                        TextFieldNumber(title: "Purchase Price", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter(style: .currency), isInvalid: purchasePrice.isZero || purchasePrice.isLess(than: 0), errorMessage: "cannot be zero")
+                        TextFieldString(header: "Spool Name", title: "What should this Spool be called?", text: $spoolName, isInvalid: spoolName.isEmpty, errorMessage: "cannot be empty")
+                        TextFieldNumber(header: "Purchase Price", title: "How much did you pay for this Spool?", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter(style: .currency), isInvalid: purchasePrice.isZero || purchasePrice.isLess(than: 0), errorMessage: "cannot be zero")
                         
                         Picker("Filament", selection: $filament) {
                             ForEach(selectableFilaments) { filament in

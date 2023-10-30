@@ -41,6 +41,8 @@ struct AddTransaction: View {
     @Binding var isPresented: Bool
     
     @Environment(\.colorScheme) private var colorScheme
+    @Environment(MainViewModel.self) private var mainContext
+    @Environment(SpoolSenseApi.self) private var api
     @State private var mode: TransactionMode = .consume
     @FocusState private var focusedField: Field?
     private let arcSize: Double = 120
@@ -217,16 +219,23 @@ struct AddTransaction: View {
                                 .padding(.bottom)
                                 .onChange(of: isLoading) {
                                     Task {
-                                        do {
-                                            try await Task.sleep(nanoseconds: UInt64(3 * Double(NSEC_PER_SEC)))
-                                            
-                                            isFinishedAdding = true
-                                        }
-                                        catch {}
+                                        var transaction = Transaction(
+                                            userId: mainContext.session!.user.id,
+                                            spoolId: spool.id,
+                                            type: TransactionType.manual,
+                                            date: Date.now,
+                                            amount: mode == .consume ? -amount : amount,
+                                            description: description
+                                        )
+                                        
+                                        let result = await api.insertTransaction(transaction: transaction.toApi())
+                                        
+                                        // TODO: There should really be an error message here
+                                        isFinishedAdding = result
                                     }
                                 }
                                 .frame(width: geometry.size.width)
-                                .disabled(amountErrorMessage != nil || description.isEmpty)
+                                .disabled(amountErrorMessage != nil || description.isEmpty || mainContext.session == nil)
                         }
                     }
                     .fixedSize()
@@ -285,5 +294,13 @@ extension AddTransaction {
 }
 
 #Preview {
-    AddTransaction(spool: SpoolConstants.demoSpoolOrange, isPresented: .constant(true))
+    @State var api = SpoolSenseApi()
+    @State var mainContext = MainViewModel(api: api)
+    
+    return AddTransaction(spool: SpoolConstants.demoSpoolOrange, isPresented: .constant(true))
+        .environment(api)
+        .environment(mainContext)
+        .task {
+            await mainContext.loadInitialData()
+        }
 }

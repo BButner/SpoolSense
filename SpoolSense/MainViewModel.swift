@@ -27,16 +27,26 @@ final class MainViewModel {
     func refreshFilaments() async {
         refreshingFilaments = true
         
-        await api.fetchFilaments()
-            .forEach { apiFilament in
-                let existingFilament = filaments.first(where: { $0.id == apiFilament.id })
-                
-                if existingFilament != nil {
-                    existingFilament?.updateFromRefresh(api: apiFilament)
-                } else {
-                    filaments.append(Filament(api: apiFilament))
-                }
+        let apiFilaments = await api.fetchFilaments()
+        
+        let removedFilamentIds = filaments.filter { current in
+            !apiFilaments.contains { api in
+                api.id == current.id
             }
+        }
+            .map { $0.id }
+        
+        filaments.removeAll { removedFilamentIds.contains($0.id) }
+        
+        apiFilaments.forEach { apiFilament in
+            let existingFilament = filaments.first(where: { $0.id == apiFilament.id })
+            
+            if existingFilament != nil {
+                existingFilament?.updateFromRefresh(api: apiFilament)
+            } else {
+                filaments.append(Filament(api: apiFilament))
+            }
+        }
         
         refreshingFilaments = false
     }

@@ -36,7 +36,6 @@ struct TextFieldString: View {
                 .background(Color(.secondarySystemGroupedBackground))
                 .cornerRadius(10)
         }
-        .padding(.horizontal)
         .onChange(of: isInvalid, initial: false) {
             if isInvalid && !shouldShowInvalid {
                 shouldShowInvalid = true

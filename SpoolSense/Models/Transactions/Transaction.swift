@@ -58,7 +58,8 @@ final class Transaction: Identifiable {
             type: self.type,
             date: self.date,
             amount: self.amount,
-            description: self.description
+            description: self.description,
+            isInitial: false
         )
     }
 }

@@ -51,6 +51,21 @@ struct SpoolsView: View {
                 }
                 
                 HStack {
+                    Button {
+                        withAnimation {
+                            showAddView.toggle()
+                        }
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .tint(.primary)
+                    }
+                    .fullScreenCover(isPresented: $showAddView)  {
+                        AddSpoolView(showAddView: $showAddView, selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)
+                    }
+                    
                     Spacer()
                     
                     Menu {

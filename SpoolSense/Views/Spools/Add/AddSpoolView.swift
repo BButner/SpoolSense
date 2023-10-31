@@ -26,7 +26,8 @@ struct AddSpoolView: View {
     @State private var totalWeight: Double = 0
     @State private var color: ChoosableColor = ChoosableColor.unselected
     
-    @State private var spoolWeightGrams: Measurement<UnitMass> = Measurement(value: 0.0, unit: .grams)
+    @State private var isLoading: Bool = false
+    @State private var isFinishedAdding: Bool = false
     
     var isInvalid: Bool {
         spoolName == ""
@@ -41,251 +42,94 @@ struct AddSpoolView: View {
     
     var body: some View {
         NavigationStack {
-            ScrollView {
-                ZStack {
-                    LinearGradient(gradient: Gradient(colors: [color.uiColor()]), startPoint: .bottom, endPoint: .top)
-                      .mask(
-                        Circle()
-                          .frame(width: 100, height: 100)
-                          .blur(radius: 100)
-                        )
-                    
-                    VStack(alignment: .leading, spacing: 30) {
-                        HStack {
-                            Spacer()
-                            Text("Add Spool")
-                                .font(.largeTitle)
-                                .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-                            Spacer()
-                        }
-                        
-                        TextFieldString(header: "Spool Name", title: "What should this Spool be called?", text: $spoolName, isInvalid: spoolName.isEmpty, errorMessage: "cannot be empty")
-                        TextFieldNumber(header: "Purchase Price", title: "How much did you pay for this Spool?", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter(style: .currency), isInvalid: purchasePrice.isZero || purchasePrice.isLess(than: 0), errorMessage: "cannot be zero")
-                        
-                        Picker("Filament", selection: $filament) {
-                            ForEach(selectableFilaments) { filament in
-                                Text(filament.isUnselectedView ? "Select a Filament" : "\(filament.brand) - \(filament.name)")
-                                    .tag(filament)
-                            }
-                        }
-                        .pickerStyle(.navigationLink)
-
-                        Picker(filament.color == nil ? "Color (Required)" : "Color (Optional)", selection: $color) {
-                            ForEach(ChoosableColor.allCases, id: \.rawValue) { c in
-                                HStack(alignment: .center) {
-                                    if (c != ChoosableColor.unselected) {
-                                        Rectangle()
-                                            .fill(c.uiColor())
-                                            .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-                                            .frame(width: 32, height: 4)
-                                    }
-
-                                    Text(c.rawValue)
+            ZStack(alignment: .topTrailing) {
+                Circle()
+                    .fill(color.uiColor().opacity(0.1))
+                    .frame(width: 300, height: 300)
+                    .blur(radius: 100)
+                    .animation(.easeIn(duration: 0.5), value: color)
+                    .opacity(0.5)
+                ScrollView {
+                    ZStack(alignment: .topTrailing) {
+                        VStack(spacing: 20) {
+                            HStack {
+                                Spacer()
+                                
+                                Button {
+                                    showAddView = false
+                                } label: {
+                                    Image(systemName: "xmark")
+                                        .font(.title3)
+                                        .fontWeight(.bold)
                                 }
-                                .tag(c)
+                                .tint(.secondary)
                             }
+                            
+                            HStack {
+                                Spacer()
+                                Text("Add Spool")
+                                    .font(.largeTitle)
+                                    .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                                Spacer()
+                            }
+                            .padding()
+                            
+                            TextFieldString(header: "Spool Name", title: "What should we call this spool?", text: $spoolName, isInvalid: spoolName.isEmpty, errorMessage: "cannot be empty")
+                            TextFieldNumber(header: "Purchase Price", title: "What did you originally pay?", value: $purchasePrice, isInvalid: purchasePrice.isZero || purchasePrice.isLess(than: .zero), errorMessage: "must be above 0")
+                            
+                            Picker("Filament", selection: $filament) {
+                                ForEach(selectableFilaments) { filament in
+                                    Text(filament.isUnselectedView ? "Select a Filament" : "\(filament.brand) - \(filament.name)")
+                                        .tag(filament)
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                            .padding()
+                            
+                            Picker(filament.color == nil ? "Color (Required)" : "Color (Optional)", selection: $color) {
+                                ForEach(ChoosableColor.allCases, id: \.rawValue) { c in
+                                    HStack(alignment: .center) {
+                                        if (c != ChoosableColor.unselected) {
+                                            Rectangle()
+                                                .fill(c.uiColor())
+                                                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
+                                                .frame(width: 32, height: 4)
+                                        }
+                                        
+                                        Text(c.rawValue)
+                                    }
+                                    .tag(c)
+                                }
+                            }
+                            .pickerStyle(.navigationLink)
+                            .padding()
+                            
+                            TextFieldNumber(header: "Spool Length", title: "What's the total original length in meters?", value: $lengthTotal, isInvalid: lengthTotal.isZero || lengthTotal.isLess(than: .zero), errorMessage: "must be above 0")
+                            TextFieldNumber(header: "Spool Length Remaining", title: "How many meters of Filament are left?", value: $lengthRemaining, isInvalid: lengthRemaining.isZero || lengthRemaining.isLess(than: .zero), errorMessage: "must be above 0")
+                            TextFieldNumber(header: "Spool Weight", title: "How much does just the spool (minus filament) weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
+                            TextFieldNumber(header: "Total Weight", title: "How much does the spool currently weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
+                            
+                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding)
+                                .onChange(of: isLoading) {
+                                    Task {
+                                        let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
+            
+                                        Task {
+                                            if await api.insertSpool(spool: newSpool.toApi()) {
+                                                mainContext.spools.append(newSpool)
+                                                showAddView.toggle()
+                                            }
+                                        }
+                                    }
+                                }
+                                .disabled(isInvalid)
                         }
+                        .padding()
                     }
                 }
             }
-            .padding()
+            .background(Color(.systemGroupedBackground))
         }
-        //        NavigationStack {
-        //            ScrollView {
-        //                VStack(spacing: 30) {
-        //                    VStack {
-        //                        Text("Add Spool")
-        //                            .font(.largeTitle)
-        //                            .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
-        //
-        //                        Text("Add a new Spool by entering all of its necessary information.")
-        //                            .padding(.top, 2)
-        //                            .multilineTextAlignment(.center)
-        //                    }
-        //                    .padding(.vertical)
-        //
-        //                    VStack(alignment: .leading) {
-        //                        Text("Basic Info")
-        //                            .font(.subheadline)
-        //                            .fontWeight(.semibold)
-        //
-        //                        VStack(spacing: 30) {
-        //                            HStack {
-        //                                HStack {
-        //                                    Text("Spool Name")
-        //                                        .fontWeight(.semibold)
-        //                                        .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-        //                                }
-        //
-        //                                Spacer()
-        //
-        //                                TextField("Required", text: $spoolName)
-        //                                    .multilineTextAlignment(.trailing)
-        //                            }
-        //
-        //                            HStack {
-        //                                HStack {
-        //                                    Text("Purchase Price")
-        //                                        .fontWeight(.semibold)
-        //                                        .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-        //                                }
-        //
-        //                                Spacer()
-        //
-        //                                TextField("Required", value: $purchasePrice, formatter: NumberFormatterConstants.emptyZeroFormatter())
-        //                                    .multilineTextAlignment(.trailing)
-        //                                Text("$")
-        //                                    .foregroundStyle(.secondary)
-        //                                    .frame(width: 15)
-        //
-        //                            }
-        //
-        //                            Picker("Filament", selection: $filament) {
-        //                                ForEach(selectableFilaments) { filament in
-        //                                    Text(filament.isUnselectedView ? "Select a Filament" : "\(filament.brand) - \(filament.name)")
-        //                                        .tag(filament)
-        //                                }
-        //                            }
-        //                            .pickerStyle(.navigationLink)
-        //
-        //                            Picker(filament.color == nil ? "Color (Required)" : "Color (Optional)", selection: $color) {
-        //                                ForEach(ChoosableColor.allCases, id: \.rawValue) { c in
-        //                                    HStack(alignment: .center) {
-        //                                        if (c != ChoosableColor.unselected) {
-        //                                            Rectangle()
-        //                                                .fill(c.uiColor())
-        //                                                .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
-        //                                                .frame(width: 32, height: 4)
-        //                                        }
-        //
-        //                                        Text(c.rawValue)
-        //                                    }
-        //                                    .tag(c)
-        //                                }
-        //                            }
-        //                            .pickerStyle(.navigationLink)
-        //                        }
-        //                        .padding()
-        //                        .background(Color(colorScheme == .dark ? .secondarySystemGroupedBackground : .systemGroupedBackground))
-        //                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        //                    }
-        //
-        //                    VStack(alignment: .leading) {
-        //                        Text("Spool Physical Properties")
-        //                            .font(.subheadline)
-        //                            .fontWeight(.semibold)
-        //
-        //                        VStack(spacing: 30) {
-        //                            HStack {
-        //                                HStack {
-        //                                    Text("Total Length")
-        //                                        .fontWeight(.semibold)
-        //                                        .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-        //                                }
-        //
-        //                                Spacer()
-        //
-        //                                TextField("Required", value: $lengthTotal, formatter: NumberFormatterConstants.emptyZeroFormatter())
-        //                                    .multilineTextAlignment(.trailing)
-        //                                Text("m")
-        //                                    .foregroundStyle(.secondary)
-        //                                    .frame(width: 15)
-        //                            }
-        //
-        //                            HStack {
-        //                                HStack {
-        //                                    Text("Remaining Length")
-        //                                        .fontWeight(.semibold)
-        //                                        .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-        //                                }
-        //
-        //                                Spacer()
-        //
-        //                                TextField("Required", value: $lengthRemaining, formatter: NumberFormatterConstants.emptyZeroFormatter())
-        //                                    .multilineTextAlignment(.trailing)
-        //                                Text("m")
-        //                                    .foregroundStyle(.secondary)
-        //                                    .frame(width: 15)
-        //                            }
-        //
-        //                            HStack {
-        //                                HStack {
-        //                                    Text("Total Weight")
-        //                                        .fontWeight(.semibold)
-        //                                        .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-        //                                }
-        //
-        //                                Spacer()
-        //
-        //                                TextField("Required", value: $totalWeight, formatter: NumberFormatterConstants.emptyZeroFormatter())
-        //                                    .multilineTextAlignment(.trailing)
-        //                                Text("g")
-        //                                    .foregroundStyle(.secondary)
-        //                                    .frame(width: 15)
-        //                            }
-        //
-        //                            HStack {
-        //                                HStack {
-        //                                    Text("Spool Weight")
-        //                                        .fontWeight(.semibold)
-        //                                        .opacity(/*@START_MENU_TOKEN@*/0.8/*@END_MENU_TOKEN@*/)
-        //                                }
-        //
-        //                                Spacer()
-        //
-        //                                TextField("Required", value: $spoolWeight, formatter: NumberFormatterConstants.emptyZeroFormatter())
-        //                                    .multilineTextAlignment(.trailing)
-        //                                Text("g")
-        //                                    .foregroundStyle(.secondary)
-        //                                    .frame(width: 15)
-        //                            }
-        //                        }
-        //                        .padding()
-        //                        .background(Color(colorScheme == .dark ? .secondarySystemGroupedBackground : .systemGroupedBackground))
-        //                        .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-        //                    }
-        //
-        //                    Spacer()
-        //
-        //                    VStack(alignment: .leading) {
-        //                        Text("Please make sure all values are entered, and no values are set to 0.")
-        //                            .fontWeight(.semibold)
-        //                            .font(.system(size: 12))
-        //                            .foregroundStyle(.red)
-        //                            .opacity(isInvalid ? 1 : 0)
-        //                            .animation(.spring, value: isInvalid)
-        //
-        //                        Button() {
-        //                            let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
-        //
-        //                            Task {
-        //                                if await api.insertSpool(spool: newSpool.toApi()) {
-        //                                    mainContext.spools.append(newSpool)
-        //                                    showAddView.toggle()
-        //                                }
-        //                            }
-        //                        } label: {
-        //                            HStack {
-        //                                Spacer()
-        //
-        //                                Text("Save Spool")
-        //                                    .fontWeight(.semibold)
-        //
-        //                                Spacer()
-        //                            }
-        //                            .padding(.vertical, 4)
-        //                        }
-        //                        .buttonStyle(.borderedProminent)
-        //                        .tint(.indigo)
-        //                        .fontWeight(.semibold)
-        //                        .disabled(isInvalid)
-        //                        .padding(.top, 4)
-        //                        .animation(.spring, value: isInvalid)
-        //                    }
-        //                }
-        //                .padding()
-        //            }
-        //        }
     }
 }
 
@@ -299,4 +143,5 @@ struct AddSpoolView: View {
         .task {
             await mainContext.loadInitialData()
         }
+        .background(Color(.systemGroupedBackground))
 }

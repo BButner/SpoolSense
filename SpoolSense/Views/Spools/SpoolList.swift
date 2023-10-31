@@ -20,12 +20,6 @@ struct SpoolList: View {
     var body: some View {
         VStack {
             SkeletonForEach(with: spools, quantity: 5) { loading, spool in
-                //                Button {
-                //                    selectedSpool = spool
-                //                    withAnimation {
-                //                        showSheet.toggle()
-                //                    }
-                //                } label: {
                 NavigationLink(value: spool) {
                     HStack(alignment: .center, spacing: 14) {
                         VStack(alignment: .leading) {
@@ -93,12 +87,6 @@ struct SpoolList: View {
                     .navigationTitle(spool.name)
                     .navigationBarTitleDisplayMode(.inline)
             }
-            //                .sheet(isPresented: $showSheet, onDismiss: {
-            //                }) {
-            //                    SpoolSheet(selectedSpool: $selectedSpool)
-            //                        .presentationDragIndicator(.visible)
-            //                }
-            //            }
         }
     }
 }

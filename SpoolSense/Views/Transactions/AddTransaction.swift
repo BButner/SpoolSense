@@ -219,7 +219,7 @@ struct AddTransaction: View {
                                 .padding(.bottom)
                                 .onChange(of: isLoading) {
                                     Task {
-                                        var transaction = Transaction(
+                                        let transaction = Transaction(
                                             userId: mainContext.session!.user.id,
                                             spoolId: spool.id,
                                             type: TransactionType.manual,

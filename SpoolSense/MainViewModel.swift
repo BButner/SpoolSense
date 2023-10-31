@@ -44,19 +44,29 @@ final class MainViewModel {
     func refreshSpools() async {
         refreshingSpools = true
         
-        await api.fetchSpools()
-            .forEach { apiSpool in
-                let existingSpool = spools.first(where: { $0.id == apiSpool.id })
-                let linkedFilament = filaments.first(where: { $0.id == apiSpool.filamentId })
-                
-                if linkedFilament != nil {
-                    if existingSpool != nil {
-                        existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!)
-                    } else {
-                        spools.append(Spool(api: apiSpool, filament: linkedFilament!))
-                    }
+        let apiSpools = await api.fetchSpools()
+        
+        let removedSpoolIds = spools.filter { currentSpool in
+            !apiSpools.contains { apiSpool in
+                apiSpool.id == currentSpool.id
+            }
+        }
+            .map { $0.id }
+        
+        spools.removeAll { removedSpoolIds.contains($0.id) }
+        
+        apiSpools.forEach { apiSpool in
+            let existingSpool = spools.first(where: { $0.id == apiSpool.id })
+            let linkedFilament = filaments.first(where: { $0.id == apiSpool.filamentId })
+            
+            if linkedFilament != nil {
+                if existingSpool != nil {
+                    existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!)
+                } else {
+                    spools.append(Spool(api: apiSpool, filament: linkedFilament!))
                 }
             }
+        }
         
         refreshingSpools = false
     }

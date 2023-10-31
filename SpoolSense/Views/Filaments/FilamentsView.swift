@@ -7,7 +7,6 @@
 //
 
 
-import SkeletonUI
 import SwiftUI
 
 struct FilamentsView: View {
@@ -41,47 +40,27 @@ struct FilamentsView: View {
             }
             
             VStack {
-                SkeletonForEach(with: mainContext.filaments, quantity: 4) { loading, filament in
+                ForEach(mainContext.filaments) { filament in
                     HStack {
                         VStack(alignment: .leading) {
-                            Text(filament?.brand ?? "")
+                            Text(filament.brand)
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .lineLimit(1)
-                                .skeleton(
-                                    with: loading,
-                                    animation: .pulse(),
-                                    shape: .rounded(.radius(4.0, style: .continuous)),
-                                    lines: 1,
-                                    scales: [0: 0.4]
-                                )
                             
-                            Text(filament?.name ?? "")
+                            Text(filament.name)
                                 .font(.title2)
                                 .fontWeight(.semibold)
                                 .lineLimit(1)
-                                .skeleton(
-                                    with: loading,
-                                    animation: .pulse(),
-                                    shape: .rounded(.radius(4.0, style: .continuous)),
-                                    lines: 1
-                                )
                         }
                         
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 4) {
-                            Text("\(filament?.nozzleMin.formatted() ?? "0") °C - \(filament?.nozzleMax.formatted() ?? "0") °C")
+                            Text("\(filament.nozzleMin.formatted()) °C - \(filament.nozzleMax.formatted()) °C")
                                 .font(.caption)
                                 .fontWeight(.semibold)
                                 .foregroundStyle(.secondary)
-                                .skeleton(
-                                    with: loading,
-                                    size: CGSize(width: 75, height: 10),
-                                    animation: .pulse(),
-                                    shape: .rounded(.radius(4.0, style: .continuous)),
-                                    lines: 1
-                                )
                             
                             HStack(alignment: .center) {
                                 Text("⌀")
@@ -89,37 +68,23 @@ struct FilamentsView: View {
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.secondary)
                                 
-                                Text((filament?.diameter.formatted() ?? "0") + " mm")
+                                Text("\(filament.diameter.formatted()) mm")
                                     .font(.caption)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.secondary)
                             }
-                            .skeleton(
-                                with: loading,
-                                size: CGSize(width: 75, height: 10),
-                                animation: .pulse(),
-                                shape: .rounded(.radius(4.0, style: .continuous)),
-                                lines: 1
-                            )
                             
                             HStack(alignment: .center) {
                                 Rectangle()
-                                    .fill(filament?.color?.uiColor() ?? .gray)
+                                    .fill(filament.color?.uiColor() ?? .gray)
                                     .frame(width: 32, height: 4)
                                     .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                                 
-                                Text(filament?.material.rawValue ?? "")
+                                Text(filament.material.rawValue)
                                     .font(.caption)
                                     .fontWeight(.semibold)
                                     .foregroundStyle(.secondary)
                             }
-                            .skeleton(
-                                with: loading,
-                                size: CGSize(width: 75, height: 10),
-                                animation: .pulse(),
-                                shape: .rounded(.radius(4.0, style: .continuous)),
-                                lines: 1
-                            )
                         }
                     }
                     .padding(14)

@@ -43,7 +43,7 @@ final class SpoolSenseApi {
     
     func getOAuthSignInURL(provider: Provider) async -> URL? {
         do {
-            return try client.auth.getOAuthSignInURL(provider: provider, redirectTo: URL(string: "spoolsense://auth-callback")!)
+            return try await client.auth.getOAuthSignInURL(provider: provider, redirectTo: URL(string: "spoolsense://auth-callback")!)
         } catch {
             print("### Google Sign in Error: \(error)")
             return nil
@@ -51,13 +51,13 @@ final class SpoolSenseApi {
     }
     
     func insertSpool(spool: SpoolApi) async -> Bool {
-        let query = client.database
-            .from("spools_dev")
-            .insert(values: spool, returning: .representation)
-            .select()
-            .single()
-        
         do {
+            let query = try await client.database
+                .from("spools_dev")
+                .insert(values: spool, returning: .representation)
+                .select()
+                .single()
+            
             let response: SpoolApi = try await query.execute().value
             return response.id == spool.id
         } catch {
@@ -92,25 +92,26 @@ final class SpoolSenseApi {
     
     func fetchSpools() async -> [SpoolApi] {
         do {
-            return try await client.database.from("spools_dev")
-                .select()
-                .execute()
-                .value
+            let query = try await client.database.rpc(fn: "get_spools_with_amount_dev")
+            
+            let response: [SpoolApi] = try await query.execute().value
+            
+            return response
         } catch {
-            print("Error when Fetching Spools: \(error)")
+            print("Error when Fetching Spools: \(error) | \(error.localizedDescription)")
             
             return []
         }
     }
     
     func insertTransaction(transaction: TransactionApi) async -> Bool {
-        let query = client.database
-            .from("transactions_dev")
-            .insert(values: transaction, returning: .representation)
-            .select()
-            .single()
-        
         do {
+            let query = try await client.database
+                .from("transactions_dev")
+                .insert(values: transaction, returning: .representation)
+                .select()
+                .single()
+            
             let response: SpoolApi = try await query.execute().value
             return response.id == transaction.id
         } catch {

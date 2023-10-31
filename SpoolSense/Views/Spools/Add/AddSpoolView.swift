@@ -48,7 +48,6 @@ struct AddSpoolView: View {
                     .frame(width: 300, height: 300)
                     .blur(radius: 100)
                     .animation(.easeIn(duration: 0.5), value: color)
-                    .opacity(0.5)
                 ScrollView {
                     ZStack(alignment: .topTrailing) {
                         VStack(spacing: 20) {

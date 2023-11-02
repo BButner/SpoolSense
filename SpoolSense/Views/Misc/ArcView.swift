@@ -10,11 +10,13 @@
 import SwiftUI
 
 struct ArcView: View {
+    static var defaultStrokeLineWidth: Double = 8
+    
     @Environment(\.isEnabled) var isEnabled
     var length: Double
     var endAngle: Angle
     var style: Color
-    var strokeLineWidth: Double = 8
+    var strokeLineWidth: Double = defaultStrokeLineWidth
     var animated: Bool = true
     @State private var animatedAngleDegrees: Double = 0
     
@@ -27,12 +29,11 @@ struct ArcView: View {
             )
             .frame(width: length, height: length)
             .onChange(of: endAngle, initial: true) {
-                withAnimation(.easeInOut) {
-                    animatedAngleDegrees = endAngle.degrees < 0 
-                    ? 0
-                    : endAngle.degrees > 360 ? 360 : endAngle.degrees
-                }
+                animatedAngleDegrees = endAngle.degrees < 0
+                ? 0
+                : endAngle.degrees > 360 ? 360 : endAngle.degrees
             }
+            .animation(.easeInOut, value: animatedAngleDegrees)
     }
 }
 

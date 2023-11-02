@@ -68,9 +68,9 @@ struct SpoolSheet: View {
 
                 
                 Button("Test") {
-                    withAnimation {
-                        showAddTransaction.toggle()
-                    }
+//                    withAnimation {
+//                        showAddTransaction.toggle()
+//                    }
                 }
                 .fullScreenCover(isPresented: $showAddTransaction, onDismiss: {
                 }) {

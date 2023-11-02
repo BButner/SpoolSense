@@ -89,7 +89,8 @@ final class Spool: Identifiable, Hashable {
     }
     
     func uiColor() -> Color {
-        self.color?.uiColor() ?? self.filament.color?.uiColor() ?? .gray
+        print("getting color for \(self.name)")
+        return self.color?.uiColor() ?? self.filament.color?.uiColor() ?? .gray
     }
     
     static func == (lhs: Spool, rhs: Spool) -> Bool {

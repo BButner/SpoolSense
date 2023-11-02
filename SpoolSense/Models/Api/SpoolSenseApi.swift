@@ -77,9 +77,7 @@ final class SpoolSenseApi {
                 .select()
                 .execute()
                 .value
-            
-            print("Default Filaments: \(default_filaments)")
-            
+                        
             filaments.append(contentsOf: default_filaments)
             
             return filaments

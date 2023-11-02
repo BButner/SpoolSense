@@ -11,12 +11,12 @@ import SwiftUI
 
 struct SpoolsView: View {
     @Environment(MainViewModel.self) private var mainContext
-
+    
     @State private var showAddView = false
     @State private var isAscending = true
     
     @AppStorage("spoolsSortBy") var sortBy: SpoolSortOptions = .name
-        
+    
     var body: some View {
         NavigationStack {
             ScrollView {
@@ -29,7 +29,7 @@ struct SpoolsView: View {
                                 icon: Image(systemName: "printer")
                             )
                             Stat(
-                                title: "Weight", 
+                                title: "Weight",
                                 value: "~ \(((mainContext.spools.reduce(0) { $0 + $1.currentWeightEstimate() }) / 1000).rounded(toPlaces: 1)) kg",
                                 icon: Image(systemName: "scalemass")
                             )
@@ -52,9 +52,9 @@ struct SpoolsView: View {
                 
                 HStack {
                     Button {
-                        withAnimation {
-                            showAddView.toggle()
-                        }
+//                        withAnimation {
+//                            showAddView.toggle()
+//                        }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
@@ -93,21 +93,7 @@ struct SpoolsView: View {
                 }
                 .padding()
                 
-                SpoolList(loading: mainContext.refreshingSpools, spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
-                    .overlay {
-                        if mainContext.spools.count == 0 && mainContext.refreshingSpools == false && mainContext.initialDataLoaded == true {
-                            GeometryReader() { _ in
-                                ContentUnavailableView {
-                                    Label("No Spools", systemImage: "printer.fill")
-                                } description: {
-                                    Text("New Spools you add will appear here.")
-                                        .padding(.top)
-                                }
-                                .opacity(0.7)
-                            }
-                            .background(Color(.systemGroupedBackground))
-                        }
-                    }
+                SpoolList(loading: !mainContext.initialDataLoaded, spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
             }
             .padding()
             .background(Color(.systemGroupedBackground))

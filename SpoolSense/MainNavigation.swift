@@ -44,21 +44,13 @@ enum MenuOptions: Int, CaseIterable {
     @ViewBuilder func view() -> some View {
         switch self {
         case .spools:
-            withAnimation {
-                SpoolsView()
-            }
+            SpoolsView()
         case .filaments:
-            withAnimation {
-                FilamentsView()
-            }
+            FilamentsView()
         case .cost:
-            withAnimation {
-                Text("Costs")
-            }
+            Text("Costs")
         case .settings:
-            withAnimation {
-                Text("Settings")
-            }
+            Text("Settings")
         }
     }
 }
@@ -74,7 +66,7 @@ struct MainNavigation: View {
                 menuOption.view()
                     .tabItem {
                         menuOption.icon
-
+                        
                         Text(menuOption.title)
                     }
             }

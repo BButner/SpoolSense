@@ -128,9 +128,9 @@ struct LoginView: View {
                 print("Getting login...")
                 mainContext.session = await api.getSession()
                 
-                withAnimation {
+//                withAnimation {
                     isCheckingLogin = false
-                }
+//                }
             }
         }
     }

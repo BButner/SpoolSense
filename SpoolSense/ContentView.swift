@@ -14,6 +14,7 @@ struct ContentView: View {
     @State private var isCheckingLogin: Bool = true
     @State private var loading: Bool = false
     @State private var complete: Bool = false
+    @State private var error: Bool = false
     
     var body: some View {
 //        ZStack {
@@ -39,7 +40,7 @@ struct ContentView: View {
             Spacer()
             Text("testing this is a long test")
             Spacer()
-            DragConfirm(text: "Swipe to Test", isLoading: $loading, isComplete: $complete)
+            DragConfirm(text: "Swipe to Test", isLoading: $loading, isComplete: $complete, isError: $error)
                 .onChange(of: loading) {
                     Task {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
@@ -49,6 +50,7 @@ struct ContentView: View {
                 }
             Spacer()
         }
+        .padding()
     }
 }
 

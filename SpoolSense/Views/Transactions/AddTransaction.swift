@@ -50,6 +50,7 @@ struct AddTransaction: View {
     @State private var description: String = ""
     @State private var isLoading: Bool = false
     @State private var isFinishedAdding: Bool = false
+    @State private var isErrorAdding: Bool = false
     
     var amountErrorMessage: String? {
         if amount == 0 {
@@ -214,7 +215,7 @@ struct AddTransaction: View {
                 ZStack {
                     ZStack(alignment: isLoading ? .center : .bottom) {
                         VStack(spacing: 0) {
-                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding)
+                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding)
                                 .padding(.horizontal)
                                 .padding(.bottom)
                                 .onChange(of: isLoading) {

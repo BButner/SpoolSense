@@ -42,6 +42,29 @@ struct Skeleton<S>: ViewModifier where S : Shape {
     }
 }
 
+struct ConfirmationPopup<P>: View where P: View {
+    @Binding var show: Bool
+    let presenting: () -> P
+    let id: String
+    let namespace: Namespace.ID
+    
+    var body: some View {
+        GeometryReader { geometry in
+            if show {
+                ZStack(alignment: .center) {
+                    self.presenting()
+                        .blur(radius: self.show ? 1 : 0)
+                    
+                    Circle()
+                        .fill(.indigo)
+                        .matchedGeometryEffect(id: id, in: namespace)
+                        .frame(width: show ? 100 : 0, height: show ? 1 : 0)
+                }
+            }
+        }
+    }
+}
+
 extension View {
     func skeleton<S>(
         loading: Bool,
@@ -56,5 +79,17 @@ extension View {
             }
         }
         .animation(.easeInOut(duration: 1.5).repeatForever(autoreverses: false), value: loading)
+    }
+    
+    func confirmationPopup(show: Binding<Bool>, id: String, namespace: Namespace.ID) -> some View {
+        ConfirmationPopup(show: show, presenting: { self }, id: id, namespace: namespace)
+    }
+    
+    func withoutAnimation(action: @escaping () -> Void) {
+        var transaction = SwiftUI.Transaction()
+        transaction.disablesAnimations = true
+        withTransaction(transaction) {
+            action()
+        }
     }
 }

@@ -16,6 +16,7 @@ enum DragConfirmState: Int {
 struct DragConfirm: View {
     @Namespace var namespace
     @Environment(\.isEnabled) var isEnabled
+    @Environment(OverlayManager.self) private var overlayManager
     
     var text: String
     @Binding var isLoading: Bool
@@ -73,7 +74,7 @@ struct DragConfirm: View {
                             .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 2))
                             .matchedGeometryEffect(id: "indicator", in: namespace)
                             .animation(.interactiveSpring, value: offset)
-                    } else {
+                    } else if !showFinished {
                         ZStack {
                             Rectangle()
                                 .fill(.indigo)
@@ -135,6 +136,16 @@ struct DragConfirm: View {
             .frame(width: geo.size.width, height: geo.size.height)
         }
         .frame(height: buttonLength + buttonPadding)
+        .onChange(of: state) {
+            if state == .success || state == .error {
+                showFinished = true
+            }
+        }
+        .onChange(of: showFinished) {
+            if showFinished {
+                overlayManager.enqueueOverlay(overlay: OverlayItem(content: AnyView(overlayTest())))
+            }
+        }
     }
 }
 
@@ -146,6 +157,44 @@ extension DragConfirm {
             .first(where: { $0.keyWindow != nil })?
             .keyWindow
     }
+    
+    func overlayTest() -> some View {
+        return GeometryReader { geo in
+            ZStack {
+                VStack {
+                    HStack {
+                        Spacer()
+                        Text("Testing")
+                        Spacer()
+                    }
+                    .padding()
+                    
+                    Spacer()
+                    
+                    Text("another test")
+                    
+                    Spacer()
+                    
+                    Text(geo.safeAreaInsets.top.formatted())
+                }
+                .padding()
+                .padding(.top, geo.safeAreaInsets.bottom)
+                .padding(.bottom, geo.safeAreaInsets.top)
+                .animation(.bouncy, value: showFinished)
+            }
+            .ignoresSafeArea()
+            .background(isError ? .red : .indigo)
+            .mask {
+                ZStack {
+                    Rectangle()
+                        .fill(.indigo)
+                        .clipShape(RoundedRectangle(cornerRadius: 50.0))
+                        .matchedGeometryEffect(id: "indicator", in: namespace)
+                }
+                .ignoresSafeArea()
+            }
+        }
+    }
 }
 
 #Preview {
@@ -153,6 +202,7 @@ extension DragConfirm {
         @State private var isLoading: Bool = false
         @State private var isComplete: Bool = false
         @State private var isError: Bool = false
+        @State var overlayManager = OverlayManager()
         
         var body: some View {
             NavigationStack {
@@ -175,6 +225,7 @@ extension DragConfirm {
                                 }
                             }
                         }
+                        .environment(overlayManager)
                 }
                 .padding()
                 .navigationTitle("Drag Confirm")

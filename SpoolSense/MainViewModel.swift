@@ -9,6 +9,7 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 @Observable
 final class MainViewModel {
@@ -16,6 +17,7 @@ final class MainViewModel {
     var filaments = [Filament]()
     var spools = [Spool]()
     var session: Session?
+    
     private(set) var initialDataLoaded: Bool = false
     private(set) var refreshingFilaments: Bool = false
     private(set) var refreshingSpools: Bool = false

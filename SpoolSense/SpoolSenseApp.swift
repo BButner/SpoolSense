@@ -11,6 +11,7 @@ import SwiftUI
 struct SpoolSenseApp: App {
     @State private var spoolApi: SpoolSenseApi
     @State private var mainViewModel: MainViewModel
+    @State private var overlayManager: OverlayManager = OverlayManager()
     
     init() {
         let api = SpoolSenseApi()
@@ -20,9 +21,17 @@ struct SpoolSenseApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .environment(spoolApi)
-                .environment(mainViewModel)
+            ZStack {
+                ContentView()
+                    .environment(spoolApi)
+                    .environment(mainViewModel)
+                    .environment(overlayManager)
+                
+                if let overlay = overlayManager.currentOverlay {
+                    overlay.content
+                }
+            }
+            .animation(.default, value: overlayManager.overlayQueue)
         }
     }
 }

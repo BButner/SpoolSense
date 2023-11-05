@@ -15,6 +15,7 @@ struct ContentView: View {
     @State private var loading: Bool = false
     @State private var complete: Bool = false
     @State private var error: Bool = false
+    @State private var popupQueue: DispatchQueue = DispatchQueue(label: "popupQueue")
     
     var body: some View {
 //        ZStack {
@@ -57,8 +58,10 @@ struct ContentView: View {
 #Preview {
     @State var api = SpoolSenseApi()
     @State var mainContext = MainViewModel(api: api)
+    @State var overlayManager: OverlayManager = OverlayManager()
     
     return ContentView()
         .environment(api)
         .environment(mainContext)
+        .environment(overlayManager)
 }

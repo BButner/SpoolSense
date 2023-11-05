@@ -176,20 +176,31 @@ extension DragConfirm {
                     Spacer()
                     
                     Text(geo.safeAreaInsets.top.formatted())
+                    
+                    Spacer()
+                    
+                    Button("Test Closing") {
+                        withAnimation(defaultAnimation) {
+                            showFinished = false
+                        }
+                        overlayManager.dequeueOverlay()
+                    }
                 }
                 .padding()
                 .padding(.top, geo.safeAreaInsets.bottom)
                 .padding(.bottom, geo.safeAreaInsets.top)
-                .animation(.bouncy, value: showFinished)
+                .animation(defaultAnimation, value: showFinished)
             }
             .ignoresSafeArea()
             .background(isError ? .red : .indigo)
             .mask {
                 ZStack {
-                    Rectangle()
-                        .fill(.indigo)
-                        .clipShape(RoundedRectangle(cornerRadius: 50.0))
-                        .matchedGeometryEffect(id: "indicator", in: namespace)
+                    if showFinished {
+                        Rectangle()
+                            .fill(.indigo)
+                            .clipShape(RoundedRectangle(cornerRadius: 50.0))
+                            .matchedGeometryEffect(id: "indicator", in: namespace)
+                    }
                 }
                 .ignoresSafeArea()
             }

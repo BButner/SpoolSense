@@ -26,12 +26,13 @@ struct SpoolSenseApp: App {
                     .environment(spoolApi)
                     .environment(mainViewModel)
                     .environment(overlayManager)
+                    .blur(radius: overlayManager.overlayQueue.isEmpty ? 0 : 5.0)
                 
                 if let overlay = overlayManager.currentOverlay {
                     overlay.content
                 }
             }
-            .animation(.default, value: overlayManager.overlayQueue)
+            .animation(.bouncy, value: overlayManager.overlayQueue)
         }
     }
 }

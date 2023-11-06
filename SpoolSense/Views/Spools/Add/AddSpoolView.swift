@@ -109,24 +109,24 @@ struct AddSpoolView: View {
                             TextFieldNumber(header: "Spool Weight", title: "How much does just the spool (minus filament) weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
                             TextFieldNumber(header: "Total Weight", title: "How much does the spool currently weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
                             
-                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding)
-                                .onChange(of: isLoading) {
-                                    Task {
-                                        let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
-            
-                                        Task {
-                                            if await api.insertSpool(spool: newSpool.toApi()) {
-                                                mainContext.spools.append(newSpool)
-//                                                showAddView.toggle()
-                                                isFinishedAdding = true
-                                            } else {
-                                                isFinishedAdding = true
-                                                isErrorAdding = true
-                                            }
-                                        }
-                                    }
-                                }
-                                .disabled(isInvalid)
+//                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding)
+//                                .onChange(of: isLoading) {
+//                                    Task {
+//                                        let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
+//            
+//                                        Task {
+//                                            if await api.insertSpool(spool: newSpool.toApi()) {
+//                                                mainContext.spools.append(newSpool)
+////                                                showAddView.toggle()
+//                                                isFinishedAdding = true
+//                                            } else {
+//                                                isFinishedAdding = true
+//                                                isErrorAdding = true
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                                .disabled(isInvalid)
                         }
                         .padding()
                     }

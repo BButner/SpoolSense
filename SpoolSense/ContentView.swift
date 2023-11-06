@@ -10,6 +10,7 @@ import SwiftUI
 struct ContentView: View {
     @Environment(MainViewModel.self) private var mainContext
     @Environment(SpoolSenseApi.self) private var api
+    @Environment(OverlayManager.self) private var overlayManager
     
     @State private var isCheckingLogin: Bool = true
     @State private var loading: Bool = false
@@ -41,7 +42,7 @@ struct ContentView: View {
             Spacer()
             Text("testing this is a long test")
             Spacer()
-            DragConfirm(text: "Swipe to Test", isLoading: $loading, isComplete: $complete, isError: $error)
+            DragConfirm(text: "Swipe to Test", isLoading: $loading, isComplete: $complete, isError: $error, successView: AnyView(exampleSuccessView()), errorView: AnyView(exampleErrorView()))
                 .onChange(of: loading) {
                     Task {
                         DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
@@ -49,9 +50,50 @@ struct ContentView: View {
                         }
                     }
                 }
-            Spacer()
         }
         .padding()
+    }
+    
+    func exampleSuccessView() -> some View {
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                Text("Success!")
+                    .font(.largeTitle)
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            Button("Close") {
+                overlayManager.dequeueOverlay()
+            }
+        }
+    }
+    
+    func exampleErrorView() -> some View {
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                Text("Error!")
+                    .font(.largeTitle)
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            Button("Done") {
+                overlayManager.dequeueOverlay()
+            }
+        }
     }
 }
 

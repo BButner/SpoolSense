@@ -1,15 +1,6 @@
 {
   "pins" : [
     {
-      "identity" : "engine",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nathantannar4/Engine",
-      "state" : {
-        "revision" : "4ca197be65f7ddeb3387e4e71aed7e508b5b58f5",
-        "version" : "0.1.13"
-      }
-    },
-    {
       "identity" : "keychainaccess",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/kishikawakatsumi/KeychainAccess",
@@ -25,24 +16,6 @@
       "state" : {
         "branch" : "master",
         "revision" : "cb0c6a637d132cc609104731ea8cb2d7f5270f18"
-      }
-    },
-    {
-      "identity" : "transmission",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nathantannar4/Transmission",
-      "state" : {
-        "revision" : "f55f6995907a6326932748e210d66009d646d4f7",
-        "version" : "0.1.27"
-      }
-    },
-    {
-      "identity" : "turbocharger",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/nathantannar4/Turbocharger",
-      "state" : {
-        "revision" : "904612344204073864a69967b9b8113039b6fcb1",
-        "version" : "0.1.9"
       }
     }
   ],

@@ -22,6 +22,8 @@ struct DragConfirm: View {
     @Binding var isLoading: Bool
     @Binding var isComplete: Bool
     @Binding var isError: Bool
+    var successView: AnyView
+    var errorView: AnyView
     
     @State private var showFinished: Bool = false
     
@@ -146,6 +148,11 @@ struct DragConfirm: View {
                 overlayManager.enqueueOverlay(overlay: OverlayItem(content: AnyView(overlayTest())))
             }
         }
+        .onChange(of: overlayManager.currentOverlay) {
+            if showFinished {
+                showFinished.toggle()
+            }
+        }
     }
 }
 
@@ -162,28 +169,10 @@ extension DragConfirm {
         return GeometryReader { geo in
             ZStack {
                 VStack {
-                    HStack {
-                        Spacer()
-                        Text("Testing")
-                        Spacer()
-                    }
-                    .padding()
-                    
-                    Spacer()
-                    
-                    Text("another test")
-                    
-                    Spacer()
-                    
-                    Text(geo.safeAreaInsets.top.formatted())
-                    
-                    Spacer()
-                    
-                    Button("Test Closing") {
-                        withAnimation(defaultAnimation) {
-                            showFinished = false
-                        }
-                        overlayManager.dequeueOverlay()
+                    if isError {
+                        errorView
+                    } else {
+                        successView
                     }
                 }
                 .padding()
@@ -197,7 +186,7 @@ extension DragConfirm {
                 ZStack {
                     if showFinished {
                         Rectangle()
-                            .fill(.indigo)
+                            .fill(.black)
                             .clipShape(RoundedRectangle(cornerRadius: 50.0))
                             .matchedGeometryEffect(id: "indicator", in: namespace)
                     }
@@ -228,7 +217,7 @@ extension DragConfirm {
                     
                     Spacer()
                     
-                    DragConfirm(text: "Swipe to Confirm", isLoading: $isLoading, isComplete: $isComplete, isError: $isError)
+                    DragConfirm(text: "Swipe to Confirm", isLoading: $isLoading, isComplete: $isComplete, isError: $isError, successView: AnyView(exampleSuccessView()), errorView: AnyView(exampleErrorView()))
                         .onChange(of: isLoading) {
                             Task {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
@@ -240,6 +229,48 @@ extension DragConfirm {
                 }
                 .padding()
                 .navigationTitle("Drag Confirm")
+            }
+        }
+        
+        func exampleSuccessView() -> some View {
+            VStack {
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    Text("Success!")
+                        .font(.largeTitle)
+                        .foregroundStyle(.white)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                
+                Spacer()
+                
+                Button("Close") {
+                    overlayManager.dequeueOverlay()
+                }
+            }
+        }
+        
+        func exampleErrorView() -> some View {
+            VStack {
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    Text("Error!")
+                        .font(.largeTitle)
+                        .foregroundStyle(.white)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                
+                Spacer()
+                
+                Button("Done") {
+                    overlayManager.dequeueOverlay()
+                }
             }
         }
     }

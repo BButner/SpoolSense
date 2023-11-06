@@ -215,28 +215,28 @@ struct AddTransaction: View {
                 ZStack {
                     ZStack(alignment: isLoading ? .center : .bottom) {
                         VStack(spacing: 0) {
-                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding)
-                                .padding(.horizontal)
-                                .padding(.bottom)
-                                .onChange(of: isLoading) {
-                                    Task {
-                                        let transaction = Transaction(
-                                            userId: mainContext.session!.user.id,
-                                            spoolId: spool.id,
-                                            type: TransactionType.manual,
-                                            date: Date.now,
-                                            amount: mode == .consume ? -amount : amount,
-                                            description: description
-                                        )
-                                        
-                                        let result = await api.insertTransaction(transaction: transaction.toApi())
-                                        
-                                        // TODO: There should really be an error message here
-                                        isFinishedAdding = result
-                                    }
-                                }
-                                .frame(width: geometry.size.width)
-                                .disabled(amountErrorMessage != nil || description.isEmpty || mainContext.session == nil)
+//                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding)
+//                                .padding(.horizontal)
+//                                .padding(.bottom)
+//                                .onChange(of: isLoading) {
+//                                    Task {
+//                                        let transaction = Transaction(
+//                                            userId: mainContext.session!.user.id,
+//                                            spoolId: spool.id,
+//                                            type: TransactionType.manual,
+//                                            date: Date.now,
+//                                            amount: mode == .consume ? -amount : amount,
+//                                            description: description
+//                                        )
+//                                        
+//                                        let result = await api.insertTransaction(transaction: transaction.toApi())
+//                                        
+//                                        // TODO: There should really be an error message here
+//                                        isFinishedAdding = result
+//                                    }
+//                                }
+//                                .frame(width: geometry.size.width)
+//                                .disabled(amountErrorMessage != nil || description.isEmpty || mainContext.session == nil)
                         }
                     }
                     .fixedSize()

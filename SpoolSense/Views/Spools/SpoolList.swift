@@ -99,7 +99,6 @@ struct SpoolList: View {
                     .foregroundStyle(.primary)
                     .navigationDestination(for: Spool.self) { spool in
                         SpoolSheet(selectedSpool: spool)
-                            .navigationTitle(spool.name)
                             .navigationBarTitleDisplayMode(.inline)
                     }
                 }

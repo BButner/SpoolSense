@@ -26,6 +26,7 @@ struct DragConfirm: View {
     var errorView: AnyView
     
     @State private var showFinished: Bool = false
+    @State private var activeOverlayId: UUID?
     
     var state: DragConfirmState {
         if isLoading && !isComplete {
@@ -72,7 +73,7 @@ struct DragConfirm: View {
                 ZStack {
                     if state == .idle {
                         Rectangle()
-                            .fill(dragProgressFill(width: geo.size.width))
+                            .fill(isEnabled ? dragProgressFill(width: geo.size.width) : .gray.opacity(0.2))
                             .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 2))
                             .matchedGeometryEffect(id: "indicator", in: namespace)
                             .animation(.interactiveSpring, value: offset)
@@ -140,16 +141,21 @@ struct DragConfirm: View {
         .frame(height: buttonLength + buttonPadding)
         .onChange(of: state) {
             if state == .success || state == .error {
+                print("should show finished")
                 showFinished = true
             }
         }
         .onChange(of: showFinished) {
             if showFinished {
-                overlayManager.enqueueOverlay(overlay: OverlayItem(content: AnyView(overlayTest())))
+                print("should be showing overlay")
+                let overlayItem = OverlayItem(content: AnyView(overlayTest()))
+                activeOverlayId = overlayItem.id
+                overlayManager.enqueueOverlay(overlay: overlayItem)
             }
         }
-        .onChange(of: overlayManager.currentOverlay) {
-            if showFinished {
+        .onChange(of: overlayManager.currentOverlay, initial: false) {
+            if showFinished && (overlayManager.currentOverlay == nil || overlayManager.currentOverlay!.id != activeOverlayId) {
+                print("should be hiding showfinished")
                 showFinished.toggle()
             }
         }

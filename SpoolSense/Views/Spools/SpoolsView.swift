@@ -52,9 +52,9 @@ struct SpoolsView: View {
                 
                 HStack {
                     Button {
-//                        withAnimation {
-//                            showAddView.toggle()
-//                        }
+                        withAnimation {
+                            showAddView.toggle()
+                        }
                     } label: {
                         Image(systemName: "plus.circle.fill")
                             .resizable()

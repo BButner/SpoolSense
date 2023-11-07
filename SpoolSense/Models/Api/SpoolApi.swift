@@ -15,22 +15,20 @@ class SpoolApi: Codable, Identifiable {
     
     var name: String
     var lengthTotal: Double // Default in Meters
-    var lengthRemaining: Double // Default in Meters
     var purchasePrice: Double
     var spoolWeight: Double // Default in Grams
     var totalWeight: Double // Default in Grams
     var color: ChoosableColor?
     
     enum CodingKeys: CodingKey {
-        case id, filament_id, name, length_total, length_remaining, purchase_price, spool_weight, total_weight, color
+        case id, filament_id, name, length_total, purchase_price, spool_weight, total_weight, color
     }
     
-    init(id: UUID, filamentId: UUID, name: String, lengthTotal: Double, lengthRemaining: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double, color: ChoosableColor?) {
+    init(id: UUID, filamentId: UUID, name: String, lengthTotal: Double, purchasePrice: Double, spoolWeight: Double, totalWeight: Double, color: ChoosableColor?) {
         self.id = id
         self.filamentId = filamentId
         self.name = name
         self.lengthTotal = lengthTotal
-        self.lengthRemaining = lengthRemaining
         self.purchasePrice = purchasePrice
         self.spoolWeight = spoolWeight
         self.totalWeight = totalWeight
@@ -45,7 +43,6 @@ class SpoolApi: Codable, Identifiable {
         
         self.name = try container.decode(String.self, forKey: .name)
         self.lengthTotal = try container.decode(Double.self, forKey: .length_total)
-        self.lengthRemaining = try container.decode(Double.self, forKey: .length_remaining)
         self.purchasePrice = try container.decode(Double.self, forKey: .purchase_price)
         self.spoolWeight = try container.decode(Double.self, forKey: .spool_weight)
         self.totalWeight = try container.decode(Double.self, forKey: .total_weight)
@@ -60,7 +57,6 @@ class SpoolApi: Codable, Identifiable {
         
         try container.encode(name, forKey: .name)
         try container.encode(lengthTotal, forKey: .length_total)
-        try container.encode(lengthRemaining, forKey: .length_remaining)
         try container.encode(purchasePrice, forKey: .purchase_price)
         try container.encode(spoolWeight, forKey: .spool_weight)
         try container.encode(totalWeight, forKey: .total_weight)

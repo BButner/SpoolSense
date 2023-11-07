@@ -13,6 +13,7 @@ struct AddSpoolView: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(MainViewModel.self) private var mainContext
     @Environment(SpoolSenseApi.self) private var api
+    @Environment(OverlayManager.self) private var overlayManager
     
     @Binding var showAddView: Bool
     var selectableFilaments: [Filament]
@@ -107,26 +108,37 @@ struct AddSpoolView: View {
                             TextFieldNumber(header: "Spool Length", title: "What's the total original length in meters?", value: $lengthTotal, isInvalid: lengthTotal.isZero || lengthTotal.isLess(than: .zero), errorMessage: "must be above 0")
                             TextFieldNumber(header: "Spool Length Remaining", title: "How many meters of Filament are left?", value: $lengthRemaining, isInvalid: lengthRemaining.isZero || lengthRemaining.isLess(than: .zero), errorMessage: "must be above 0")
                             TextFieldNumber(header: "Spool Weight", title: "How much does just the spool (minus filament) weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
-                            TextFieldNumber(header: "Total Weight", title: "How much does the spool currently weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
+                            TextFieldNumber(header: "Total Weight", title: "How much does the spool currently weigh?", value: $totalWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
                             
-//                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding)
-//                                .onChange(of: isLoading) {
-//                                    Task {
-//                                        let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
-//            
-//                                        Task {
-//                                            if await api.insertSpool(spool: newSpool.toApi()) {
-//                                                mainContext.spools.append(newSpool)
-////                                                showAddView.toggle()
-//                                                isFinishedAdding = true
-//                                            } else {
-//                                                isFinishedAdding = true
-//                                                isErrorAdding = true
-//                                            }
-//                                        }
-//                                    }
-//                                }
-//                                .disabled(isInvalid)
+                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding, successView: AnyView(successView()), errorView: AnyView(errorView()))
+                                .onChange(of: isLoading) {
+                                    Task {
+                                        let newSpool = Spool(id: UUID(), filament: filament, name: spoolName, lengthTotal: lengthTotal, lengthRemaining: lengthRemaining, purchasePrice: purchasePrice, spoolWeight: spoolWeight, totalWeight: totalWeight, color: color == ChoosableColor.unselected ? nil : color)
+                                        
+                                        Task {
+                                            if await api.insertSpool(spool: newSpool.toApi()) {
+                                                if newSpool.lengthRemaining < newSpool.lengthTotal {
+                                                    let transaction = TransactionApi(id: UUID(), userId: mainContext.session!.user.id, spoolId: newSpool.id, sourceId: mainContext.session!.user.id, type: .initial, date: Date.now, amount: -(newSpool.lengthTotal - newSpool.lengthRemaining), description: "")
+                                                       
+                                                    if await api.insertTransaction(transaction: transaction) {
+                                                        isFinishedAdding = true
+                                                    } else {
+                                                        isFinishedAdding = true
+                                                        isErrorAdding = true
+                                                    }
+                                                }
+                                                else {
+                                                    mainContext.spools.append(newSpool)
+                                                    isFinishedAdding = true
+                                                }
+                                            } else {
+                                                isFinishedAdding = true
+                                                isErrorAdding = true
+                                            }
+                                        }
+                                    }
+                                }
+                                .disabled(isInvalid)
                         }
                         .padding()
                     }
@@ -135,15 +147,65 @@ struct AddSpoolView: View {
             .background(Color(.systemGroupedBackground))
         }
     }
+    
+    func successView() -> some View {
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                Text("Spool Added")
+                    .font(.title)
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            Button("Done") {
+                overlayManager.dequeueOverlay()
+                showAddView.toggle()
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+        }
+    }
+    
+    func errorView() -> some View {
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                Text("Error Adding Spool")
+                    .font(.title)
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            Button("Done") {
+                overlayManager.dequeueOverlay()
+                showAddView.toggle()
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+        }
+    }
 }
 
 #Preview {
     @State var api = SpoolSenseApi()
     @State var mainContext = MainViewModel(api: api)
+    @State var overlayManager = OverlayManager()
     
     return AddSpoolView(showAddView: .constant(true), selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)
         .environment(api)
         .environment(mainContext)
+        .environment(overlayManager)
         .task {
             await mainContext.loadInitialData()
         }

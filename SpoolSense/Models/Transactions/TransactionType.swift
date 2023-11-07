@@ -10,24 +10,12 @@
 import Foundation
 import SwiftUI
 
-enum TransactionType: Int, Codable {
-    case refill = 0
-    case manual = 1
-    case printManual = 2
-    case printApi = 3
-    
-    var title: String {
-        switch self {
-        case .refill:
-            return "Refill"
-        case .manual:
-            return "Manual Adjustment"
-        case .printManual:
-            return "Print"
-        case .printApi:
-            return "Print"
-        }
-    }
+enum TransactionType: String, Codable {
+    case refill = "Refill"
+    case manual = "Manual Adjustment"
+    case printManual = "Manual Print"
+    case printApi = "API Print"
+    case initial = "Initial Adjustment"
     
     var uiColor: Color {
         switch self {
@@ -39,6 +27,8 @@ enum TransactionType: Int, Codable {
             return .indigo
         case .printApi:
             return .indigo
+        case .initial:
+            return .gray // These aren't meant to be displayed
         }
     }
     
@@ -52,6 +42,8 @@ enum TransactionType: Int, Codable {
             return Image(systemName: "printer.dotmatrix.fill")
         case .printApi:
             return Image(systemName: "curlybraces")
+        case .initial:
+            return Image(systemName: "questionmark.folder.fill")
         }
     }
 }

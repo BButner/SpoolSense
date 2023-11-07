@@ -45,6 +45,7 @@
 		8B91D13A2AE1BA4E0092B46A /* TransactionType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D1392AE1BA4E0092B46A /* TransactionType.swift */; };
 		8B91D13C2AE1BD4C0092B46A /* Transaction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D13B2AE1BD4C0092B46A /* Transaction.swift */; };
 		8B91D1402AE2C83F0092B46A /* TransactionSource.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */; };
+		8B93E6B02AFA989600799BA7 /* SpoolFunctionParameters.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B93E6AF2AFA989600799BA7 /* SpoolFunctionParameters.swift */; };
 		8BB198492AE32186006DE5AA /* ArcView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198482AE32186006DE5AA /* ArcView.swift */; };
 		8BB1984F2AE83B1D006DE5AA /* TextFieldString.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB1984E2AE83B1D006DE5AA /* TextFieldString.swift */; };
 		8BB198512AE84821006DE5AA /* TextFieldNumber.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BB198502AE84821006DE5AA /* TextFieldNumber.swift */; };
@@ -112,6 +113,7 @@
 		8B91D1392AE1BA4E0092B46A /* TransactionType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionType.swift; sourceTree = "<group>"; };
 		8B91D13B2AE1BD4C0092B46A /* Transaction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transaction.swift; sourceTree = "<group>"; };
 		8B91D13F2AE2C83F0092B46A /* TransactionSource.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TransactionSource.swift; sourceTree = "<group>"; };
+		8B93E6AF2AFA989600799BA7 /* SpoolFunctionParameters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpoolFunctionParameters.swift; sourceTree = "<group>"; };
 		8BB198482AE32186006DE5AA /* ArcView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArcView.swift; sourceTree = "<group>"; };
 		8BB1984E2AE83B1D006DE5AA /* TextFieldString.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldString.swift; sourceTree = "<group>"; };
 		8BB198502AE84821006DE5AA /* TextFieldNumber.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldNumber.swift; sourceTree = "<group>"; };
@@ -232,6 +234,7 @@
 				8B14F8722ADD9991004DA7C0 /* FilamentApi.swift */,
 				8B14F8762ADD99CB004DA7C0 /* SpoolApi.swift */,
 				8B91D1372AE1BA420092B46A /* TransactionApi.swift */,
+				8B93E6AF2AFA989600799BA7 /* SpoolFunctionParameters.swift */,
 			);
 			path = Api;
 			sourceTree = "<group>";
@@ -510,6 +513,7 @@
 				8B14F87D2ADD9A45004DA7C0 /* Spool.swift in Sources */,
 				8B14F8732ADD9991004DA7C0 /* FilamentApi.swift in Sources */,
 				8BE342A82AEC22D80098FFB1 /* Math.swift in Sources */,
+				8B93E6B02AFA989600799BA7 /* SpoolFunctionParameters.swift in Sources */,
 				8BB198492AE32186006DE5AA /* ArcView.swift in Sources */,
 				8B14F8772ADD99CB004DA7C0 /* SpoolApi.swift in Sources */,
 				8B14F88C2ADD9DFE004DA7C0 /* FilamentsView.swift in Sources */,

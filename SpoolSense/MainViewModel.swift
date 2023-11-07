@@ -75,7 +75,7 @@ final class MainViewModel {
                 let lengthRemaining = await api.fetchSpoolLengthRemaining(spoolId: apiSpool.id)
                 
                 if existingSpool != nil {
-                    existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!, lengthRemaining: lengthRemaining)
+                    existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!, newLengthRemaining: lengthRemaining)
                 } else {
                     spools.append(Spool(api: apiSpool, filament: linkedFilament!, lengthRemaining: lengthRemaining))
                 }

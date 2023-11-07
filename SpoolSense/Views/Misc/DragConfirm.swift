@@ -141,13 +141,11 @@ struct DragConfirm: View {
         .frame(height: buttonLength + buttonPadding)
         .onChange(of: state) {
             if state == .success || state == .error {
-                print("should show finished")
                 showFinished = true
             }
         }
         .onChange(of: showFinished) {
             if showFinished {
-                print("should be showing overlay")
                 let overlayItem = OverlayItem(content: AnyView(overlayTest()))
                 activeOverlayId = overlayItem.id
                 overlayManager.enqueueOverlay(overlay: overlayItem)
@@ -155,7 +153,6 @@ struct DragConfirm: View {
         }
         .onChange(of: overlayManager.currentOverlay, initial: false) {
             if showFinished && (overlayManager.currentOverlay == nil || overlayManager.currentOverlay!.id != activeOverlayId) {
-                print("should be hiding showfinished")
                 showFinished.toggle()
             }
         }

@@ -75,12 +75,12 @@ final class Spool: Identifiable, Hashable {
         )
     }
     
-    func updateFromRefresh(api: SpoolApi, filament: Filament, lengthRemaining: Double) {
+    func updateFromRefresh(api: SpoolApi, filament: Filament, newLengthRemaining: Double) {
         if self.id != api.id { self.id = api.id }
         if self.filament != filament { self.filament = filament }
         if self.name != api.name { self.name = api.name }
         if self.lengthTotal != api.lengthTotal { self.lengthTotal = api.lengthTotal }
-        if self.lengthRemaining != lengthRemaining { self.lengthRemaining = lengthRemaining }
+        if self.lengthRemaining != newLengthRemaining { self.lengthRemaining = newLengthRemaining }
         if self.purchasePrice != api.purchasePrice { self.purchasePrice = api.purchasePrice }
         if self.spoolWeight != api.spoolWeight { self.spoolWeight = api.spoolWeight }
         if self.totalWeight != api.totalWeight { self.totalWeight = api.totalWeight }

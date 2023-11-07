@@ -70,7 +70,7 @@ final class MainViewModel {
         for apiSpool in apiSpools {
             let existingSpool = spools.first(where: { $0.id == apiSpool.id })
             let linkedFilament = filaments.first(where: { $0.id == apiSpool.filamentId })
-            
+                        
             if linkedFilament != nil {
                 let lengthRemaining = await api.fetchSpoolLengthRemaining(spoolId: apiSpool.id)
                 

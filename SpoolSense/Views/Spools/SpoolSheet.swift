@@ -65,17 +65,21 @@ struct SpoolSheet: View {
                         .font(.footnote)
                         .foregroundStyle(.secondary)
                 }
-
                 
-                Button("Test") {
-//                    withAnimation {
-//                        showAddTransaction.toggle()
-//                    }
-                }
-                .fullScreenCover(isPresented: $showAddTransaction, onDismiss: {
-                }) {
-                    AddTransaction(spool: selectedSpool, isPresented: $showAddTransaction)
-                        .presentationDragIndicator(.visible)
+                HStack {
+                    Text("Transactions")
+                        .font(.title)
+                        .fontWeight(.semibold)
+                    
+                    Spacer()
+                    
+                    NavigationLink(destination: AddTransaction(spool: selectedSpool, isPresented: $showAddTransaction)) {
+                        Image(systemName: "plus.circle.fill")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 32, height: 32)
+                            .tint(.primary)
+                    }
                 }
             }
         }

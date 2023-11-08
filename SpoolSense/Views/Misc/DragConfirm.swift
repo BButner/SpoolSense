@@ -9,110 +9,153 @@
 
 import SwiftUI
 
+enum DragConfirmState: Int {
+    case idle, loading, success, error
+}
+
 struct DragConfirm: View {
+    @Namespace var namespace
     @Environment(\.isEnabled) var isEnabled
+    @Environment(OverlayManager.self) private var overlayManager
     
     var text: String
     @Binding var isLoading: Bool
     @Binding var isComplete: Bool
+    @Binding var isError: Bool
+    var successView: AnyView
+    var errorView: AnyView
+    
+    @State private var showFinished: Bool = false
+    @State private var activeOverlayId: UUID?
+    
+    var state: DragConfirmState {
+        if isLoading && !isComplete {
+            return .loading
+        } else if isLoading && isComplete && !isError {
+            return .success
+        } else if isLoading && isComplete && isError {
+            return .error
+        } else {
+            return .idle
+        }
+    }
     
     @State private var offset = CGSize.zero
     private let buttonLength: Double = 42
     private let buttonPadding: Double = 12
     private let cornerRadius: Double = 8
     
-    private let defaultAnimation: Animation = .snappy(duration: 0.3, extraBounce: 0.2)
+    private let defaultAnimation: Animation = .snappy(duration: 0.3, extraBounce: 0.15)
+    
+    func dragProgressFill(width: Double) -> Color {
+        .indigo.opacity(
+            max(
+                offset.width / (width - buttonLength - buttonPadding),
+                0.1
+            )
+        )
+    }
     
     public var body: some View {
-        GeometryReader() { geometry in
-            ZStack(alignment: isLoading ? .center : .leading) {
-                HStack {
-                    Spacer()
-                    Text(text)
-                        .foregroundStyle(isEnabled ? .indigo.opacity(0.8) : .gray.opacity(0.8))
-                    Spacer()
+        GeometryReader { geo in
+            ZStack(alignment: .center) {
+                if state == .idle {
+                    HStack {
+                        Spacer()
+                        Text(text)
+                            .foregroundStyle(isEnabled ? .indigo.opacity(0.8) : .gray.opacity(0.8))
+                        Spacer()
+                    }
+                    .transition(.opacity)
+                    .animation(defaultAnimation, value: state)
                 }
-                .opacity(isLoading ? 0 : 1)
-                .animation(defaultAnimation, value: isLoading)
-                .animation(defaultAnimation, value: isEnabled)
                 
-                Rectangle()
-                    .fill(
-                        isLoading && isEnabled
-                        ? isLoading ? .indigo
-                        : .indigo.opacity(offset.width / (geometry.size.width - buttonLength))
-                        : .clear
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: isLoading ? buttonLength : cornerRadius))
-                    .frame(width: buttonLength + buttonPadding + (isLoading ? 0 : offset.width))
-                    .animation(defaultAnimation, value: isLoading)
-                    .animation(defaultAnimation, value: isEnabled)
+                ZStack {
+                    if state == .idle {
+                        Rectangle()
+                            .fill(isEnabled ? dragProgressFill(width: geo.size.width) : .gray.opacity(0.2))
+                            .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 2))
+                            .matchedGeometryEffect(id: "indicator", in: namespace)
+                            .animation(.interactiveSpring, value: offset)
+                    } else if !showFinished {
+                        ZStack {
+                            Rectangle()
+                                .fill(.indigo)
+                                .clipShape(RoundedRectangle(cornerRadius: buttonLength))
+                                .matchedGeometryEffect(id: "indicator", in: namespace)
+                                .frame(width: buttonLength + buttonPadding, height: buttonLength + buttonPadding)
+                            
+                            ProgressView()
+                                .progressViewStyle(.circular)
+                                .scaleEffect(state == .idle ? 0 : 1.1)
+                                .tint(.white)
+                        }
+                    }
+                }
+                .animation(defaultAnimation, value: state)
                 
-                Image(systemName: "chevron.right")
-                    .frame(width: buttonLength, height: buttonLength)
-                    .background(isEnabled ? .indigo : .gray)
-                    .clipShape(RoundedRectangle(cornerRadius: isLoading ? buttonLength : cornerRadius - 2))
-                    .frame(width: buttonLength, height: buttonLength)
-                    .offset(x: offset.width, y: 0)
-                    .foregroundStyle(.white)
-                    .font(.title2)
-                    .fontWeight(.bold)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { gesture in
-                                if gesture.translation.width >= 0 {
-                                    
-                                    if gesture.translation.width > geometry.size.width - (buttonLength + buttonPadding) {
-                                        offset = CGSize(width: geometry.size.width - (buttonLength + buttonPadding), height: 0)
-                                    } else {
-                                        offset = gesture.translation
+                if state == .idle {
+                    ZStack {
+                        Image(systemName: "chevron.right")
+                            .frame(width: buttonLength, height: buttonLength)
+                            .background(isEnabled ? .indigo : .gray)
+                            .clipShape(RoundedRectangle(cornerRadius: cornerRadius - 2))
+                            .offset(x: offset.width, y: 0)
+                            .foregroundStyle(.white)
+                            .font(.title2)
+                            .fontWeight(.bold)
+                            .padding(6)
+                            .opacity(state != .idle ? 0 : 1)
+                            .gesture(
+                                DragGesture()
+                                    .onChanged { gesture in
+                                        if gesture.translation.width >= 0 {
+                                            if gesture.translation.width > geo.size.width - (buttonLength + buttonPadding) {
+                                                if offset != CGSize(width: geo.size.width - (buttonLength + buttonPadding), height: 0) {
+                                                    Haptics.shared.play(.medium)
+                                                }
+                                                
+                                                offset = CGSize(width: geo.size.width - (buttonLength + buttonPadding), height: 0)
+                                            } else {
+                                                offset = gesture.translation
+                                            }
+                                        }
                                     }
-                                }
-                            }
-                            .onEnded { _ in
-                                if offset.width >= geometry.size.width - (buttonLength + buttonPadding) {
-                                    isLoading = true
-                                    print(isLoading)
-                                    offset = .zero
-                                } else {
-                                    offset = .zero
-                                }
-                            }
-                    )
-                    .padding(6)
-                    .opacity(isLoading ? 0 : 1)
-                    .scaleEffect(isLoading ? 0.8 : 1)
-                    .animation(defaultAnimation, value: isLoading)
-                    .animation(defaultAnimation, value: isEnabled)
-                
-                ProgressView()
-                    .progressViewStyle(.circular)
-                    .scaleEffect(isLoading && !isComplete ? 1.3 : 0)
-                    .opacity(isLoading && !isComplete ? 1 : 0)
-                    .offset(x: offset.width, y: 0)
-                    .animation(defaultAnimation, value: isLoading)
-                    .animation(.interactiveSpring, value: isComplete)
-                    .tint(.white)
-                
-                Image(systemName: "hand.thumbsup.fill")
-                    .frame(width: buttonLength, height: buttonLength)
-                    .offset(x: offset.width, y: 0)
-                    .foregroundStyle(.white)
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .padding(6)
-                    .opacity(isComplete ? 1 : 0)
-                    .scaleEffect(isComplete ? 1 : 0)
-                    .animation(.interactiveSpring, value: isComplete)
+                                    .onEnded { _ in
+                                        if offset.width >= geo.size.width - (buttonLength + buttonPadding) {
+                                            isLoading = true
+                                            Haptics.shared.play(.medium)
+                                            offset = .zero
+                                        } else {
+                                            offset = .zero
+                                        }
+                                    }
+                            )
+                            .animation(.interactiveSpring, value: offset)
+                    }
+                    .frame(width: geo.size.width, height: geo.size.height, alignment: .leading)
+                }
+            }
+            .frame(width: geo.size.width, height: geo.size.height)
+        }
+        .frame(height: buttonLength + buttonPadding)
+        .onChange(of: state) {
+            if state == .success || state == .error {
+                showFinished = true
             }
         }
-        .frame(height: buttonLength + buttonPadding, alignment: .center)
-        .fixedSize(horizontal: false, vertical: /*@START_MENU_TOKEN@*/true/*@END_MENU_TOKEN@*/)
-        .background(isLoading ? .clear : isEnabled ? .indigo.opacity(0.1) : .gray.opacity(0.1))
-        .animation(.easeInOut(duration: 0.0), value: isLoading)
-        .clipShape(RoundedRectangle(cornerRadius: isLoading ? buttonLength : cornerRadius))
-        .animation(defaultAnimation, value: isLoading)
-        .animation(defaultAnimation, value: isEnabled)
+        .onChange(of: showFinished) {
+            if showFinished {
+                let overlayItem = OverlayItem(content: AnyView(overlayTest()))
+                activeOverlayId = overlayItem.id
+                overlayManager.enqueueOverlay(overlay: overlayItem)
+            }
+        }
+        .onChange(of: overlayManager.currentOverlay, initial: false) {
+            if showFinished && (overlayManager.currentOverlay == nil || overlayManager.currentOverlay!.id != activeOverlayId) {
+                showFinished.toggle()
+            }
+        }
     }
 }
 
@@ -124,14 +167,116 @@ extension DragConfirm {
             .first(where: { $0.keyWindow != nil })?
             .keyWindow
     }
+    
+    func overlayTest() -> some View {
+        return GeometryReader { geo in
+            ZStack {
+                VStack {
+                    if isError {
+                        errorView
+                    } else {
+                        successView
+                    }
+                }
+                .padding()
+                .padding(.top, geo.safeAreaInsets.bottom)
+                .padding(.bottom, geo.safeAreaInsets.top)
+                .animation(defaultAnimation, value: showFinished)
+            }
+            .ignoresSafeArea()
+            .background(isError ? .red : .indigo)
+            .mask {
+                ZStack {
+                    if showFinished {
+                        Rectangle()
+                            .fill(.black)
+                            .clipShape(RoundedRectangle(cornerRadius: 50.0))
+                            .matchedGeometryEffect(id: "indicator", in: namespace)
+                    }
+                }
+                .ignoresSafeArea()
+            }
+        }
+    }
 }
 
 #Preview {
-    @State var isLoading: Bool = false
-    @State var isComplete: Bool = false
-    
-    return VStack(alignment: .center) {
-        DragConfirm(text: "Swipe to Confirm", isLoading: $isLoading, isComplete: $isComplete)
+    struct DragConfirmPreview: View {
+        @State private var isLoading: Bool = false
+        @State private var isComplete: Bool = false
+        @State private var isError: Bool = false
+        @State var overlayManager = OverlayManager()
+        
+        var body: some View {
+            NavigationStack {
+                VStack {
+                    Spacer()
+                    
+                    Button("Reset") {
+                        isLoading = false
+                        isComplete = false
+                        isError = false
+                    }
+                    
+                    Spacer()
+                    
+                    DragConfirm(text: "Swipe to Confirm", isLoading: $isLoading, isComplete: $isComplete, isError: $isError, successView: AnyView(exampleSuccessView()), errorView: AnyView(exampleErrorView()))
+                        .onChange(of: isLoading) {
+                            Task {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 4.0) {
+                                    isComplete = true
+                                }
+                            }
+                        }
+                        .environment(overlayManager)
+                }
+                .padding()
+                .navigationTitle("Drag Confirm")
+            }
+        }
+        
+        func exampleSuccessView() -> some View {
+            VStack {
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    Text("Success!")
+                        .font(.largeTitle)
+                        .foregroundStyle(.white)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                
+                Spacer()
+                
+                Button("Close") {
+                    overlayManager.dequeueOverlay()
+                }
+            }
+        }
+        
+        func exampleErrorView() -> some View {
+            VStack {
+                Spacer()
+                
+                HStack {
+                    Spacer()
+                    Text("Error!")
+                        .font(.largeTitle)
+                        .foregroundStyle(.white)
+                        .fontWeight(.bold)
+                    Spacer()
+                }
+                
+                Spacer()
+                
+                Button("Done") {
+                    overlayManager.dequeueOverlay()
+                }
+            }
+        }
     }
-    .padding()
+    
+    return DragConfirmPreview()
 }

@@ -12,6 +12,10 @@ struct ContentView: View {
     @Environment(SpoolSenseApi.self) private var api
     
     @State private var isCheckingLogin: Bool = true
+    @State private var loading: Bool = false
+    @State private var complete: Bool = false
+    @State private var error: Bool = false
+    @State private var popupQueue: DispatchQueue = DispatchQueue(label: "popupQueue")
     
     var body: some View {
         ZStack {

@@ -29,9 +29,11 @@ struct ArcView: View {
             )
             .frame(width: length, height: length)
             .onChange(of: endAngle, initial: true) {
-                animatedAngleDegrees = endAngle.degrees < 0
-                ? 0
-                : endAngle.degrees > 360 ? 360 : endAngle.degrees
+                DispatchQueue.main.async {
+                    animatedAngleDegrees = endAngle.degrees < 0
+                    ? 0
+                    : endAngle.degrees > 360 ? 360 : endAngle.degrees
+                }
             }
             .animation(.easeInOut, value: animatedAngleDegrees)
     }

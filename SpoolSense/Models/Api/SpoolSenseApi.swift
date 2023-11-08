@@ -90,7 +90,9 @@ final class SpoolSenseApi {
     
     func fetchSpools() async -> [SpoolApi] {
         do {
-            let query = try await client.database.rpc(fn: "get_spools_with_amount_dev")
+            let query = await client.database
+                .from("spools_dev")
+                .select()
             
             let response: [SpoolApi] = try await query.execute().value
             
@@ -102,6 +104,20 @@ final class SpoolSenseApi {
         }
     }
     
+    func fetchSpoolLengthRemaining(spoolId: UUID) async -> Double {
+        do {
+            let query = try await client.database.rpc(fn: "get_spool_length_remaining_dev", params: GetSpoolLengthRemainingParams(p_spool_id: spoolId))
+            
+            let response: Double = try await query.execute().value
+            
+            return response
+        } catch {
+            print("Error when Fetching Spools: \(error) | \(error.localizedDescription)")
+            
+            return -1.0
+        }
+    }
+    
     func insertTransaction(transaction: TransactionApi) async -> Bool {
         do {
             let query = try await client.database
@@ -110,7 +126,7 @@ final class SpoolSenseApi {
                 .select()
                 .single()
             
-            let response: SpoolApi = try await query.execute().value
+            let response: TransactionApi = try await query.execute().value
             return response.id == transaction.id
         } catch {
             print("Error when Inserting Transaction: \(error)")

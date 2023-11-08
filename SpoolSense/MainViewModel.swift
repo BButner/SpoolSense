@@ -9,6 +9,7 @@
 
 import Foundation
 import Supabase
+import SwiftUI
 
 @Observable
 final class MainViewModel {
@@ -16,6 +17,7 @@ final class MainViewModel {
     var filaments = [Filament]()
     var spools = [Spool]()
     var session: Session?
+    
     private(set) var initialDataLoaded: Bool = false
     private(set) var refreshingFilaments: Bool = false
     private(set) var refreshingSpools: Bool = false
@@ -65,15 +67,17 @@ final class MainViewModel {
         
         spools.removeAll { removedSpoolIds.contains($0.id) }
         
-        apiSpools.forEach { apiSpool in
+        for apiSpool in apiSpools {
             let existingSpool = spools.first(where: { $0.id == apiSpool.id })
             let linkedFilament = filaments.first(where: { $0.id == apiSpool.filamentId })
-            
+                        
             if linkedFilament != nil {
+                let lengthRemaining = await api.fetchSpoolLengthRemaining(spoolId: apiSpool.id)
+                
                 if existingSpool != nil {
-                    existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!)
+                    existingSpool!.updateFromRefresh(api: apiSpool, filament: linkedFilament!, newLengthRemaining: lengthRemaining)
                 } else {
-                    spools.append(Spool(api: apiSpool, filament: linkedFilament!))
+                    spools.append(Spool(api: apiSpool, filament: linkedFilament!, lengthRemaining: lengthRemaining))
                 }
             }
         }
@@ -87,16 +91,18 @@ final class MainViewModel {
                 self.filaments.append($0)
             }
         
-        await api.fetchSpools().compactMap { spool in
+        let loadedSpools = await api.fetchSpools()
+        
+        for spool in loadedSpools {
             let linkedFilament = self.filaments.first { $0.id == spool.filamentId }
             
             if linkedFilament == nil {
-                return nil
+                continue
             }
             
-            return Spool(api: spool, filament: linkedFilament!)
-        }.forEach {
-            self.spools.append($0)
+            let lengthRemaining = await api.fetchSpoolLengthRemaining(spoolId: spool.id)
+            
+            self.spools.append(Spool(api: spool, filament: linkedFilament!, lengthRemaining: lengthRemaining))
         }
         
         self.initialDataLoaded = true

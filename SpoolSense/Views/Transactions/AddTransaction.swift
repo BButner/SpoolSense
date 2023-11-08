@@ -43,6 +43,9 @@ struct AddTransaction: View {
     @Environment(\.colorScheme) private var colorScheme
     @Environment(MainViewModel.self) private var mainContext
     @Environment(SpoolSenseApi.self) private var api
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
+    @Environment(OverlayManager.self) private var overlayManager
+    
     @State private var mode: TransactionMode = .consume
     @FocusState private var focusedField: Field?
     private let arcSize: Double = 120
@@ -50,6 +53,7 @@ struct AddTransaction: View {
     @State private var description: String = ""
     @State private var isLoading: Bool = false
     @State private var isFinishedAdding: Bool = false
+    @State private var isErrorAdding: Bool = false
     
     var amountErrorMessage: String? {
         if amount == 0 {
@@ -74,20 +78,6 @@ struct AddTransaction: View {
     var body: some View {
         ZStack {
             VStack {
-                HStack {
-                    Spacer()
-                    
-                    Button {
-                        isPresented = false
-                    } label: {
-                        Image(systemName: "xmark")
-                            .font(.title3)
-                            .fontWeight(.bold)
-                    }
-                    .padding(.horizontal)
-                    .tint(.secondary)
-                }
-                
                 HStack(alignment: .lastTextBaseline) {
                     Spacer()
                     
@@ -129,6 +119,13 @@ struct AddTransaction: View {
                 
                 VStack(spacing: 32) {
                     ZStack {
+                        ArcView(
+                            length: arcSize,
+                            endAngle: .degrees(360.0),
+                            style: .indigo.opacity(0.2),
+                            strokeLineWidth: 12
+                        )
+                        
                         ArcView(
                             length: arcSize,
                             endAngle: mode == .consume ? .degrees((360.0 * spool.remainingPct())) : .degrees(360.0 * newPctRemaining),
@@ -192,90 +189,31 @@ struct AddTransaction: View {
                 }
                 
                 Spacer()
+                
+                DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding, successView: AnyView(successView()), errorView: AnyView(errorView()))
+                    .onChange(of: isLoading) {
+                        Task {
+                            let transaction = Transaction(
+                                userId: mainContext.session!.user.id,
+                                spoolId: spool.id,
+                                type: TransactionType.manual,
+                                date: Date.now,
+                                amount: mode == .consume ? -amount : amount,
+                                description: description
+                            )
+                            
+                            let result = await api.insertTransaction(transaction: transaction.toApi())
+                            
+                            // TODO: There should really be an error message here
+                            isFinishedAdding = result
+                        }
+                    }
+                    .disabled(amountErrorMessage != nil || description.isEmpty || mainContext.session == nil)
             }
-            .padding(.bottom, 68)
-            .disabled(isLoading)
-            .opacity(isLoading ? 0.2 : 1)
             .animation(.easeInOut, value: isLoading)
-            
-            GeometryReader() { proxy in
-                Circle()
-                    .fill(.indigo)
-                    .opacity(isFinishedAdding ? 1 : 0)
-                    .frame(width: isFinishedAdding ? (keyWindow?.screen.bounds.width ?? 0) * 4.0 : 0, height: isFinishedAdding ? (keyWindow?.screen.bounds.height ?? 0) * 2.0 : 0)
-                    .animation(.snappy(duration: 0.3, extraBounce: 0.2), value: isFinishedAdding)
-                    .animation(.snappy(duration: 0.1, extraBounce: 0.2), value: isPresented)
-                    .position(x: proxy.size.width / 2, y: proxy.size.height / 2)
-            }
-            .clipped()
-            .ignoresSafeArea()
-            
-            GeometryReader() { geometry in
-                ZStack {
-                    ZStack(alignment: isLoading ? .center : .bottom) {
-                        VStack(spacing: 0) {
-                            DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding)
-                                .padding(.horizontal)
-                                .padding(.bottom)
-                                .onChange(of: isLoading) {
-                                    Task {
-                                        let transaction = Transaction(
-                                            userId: mainContext.session!.user.id,
-                                            spoolId: spool.id,
-                                            type: TransactionType.manual,
-                                            date: Date.now,
-                                            amount: mode == .consume ? -amount : amount,
-                                            description: description
-                                        )
-                                        
-                                        let result = await api.insertTransaction(transaction: transaction.toApi())
-                                        
-                                        // TODO: There should really be an error message here
-                                        isFinishedAdding = result
-                                    }
-                                }
-                                .frame(width: geometry.size.width)
-                                .disabled(amountErrorMessage != nil || description.isEmpty || mainContext.session == nil)
-                        }
-                    }
-                    .fixedSize()
-                    .frame(width: geometry.size.width, height: geometry.size.height, alignment: isLoading ? .center : .bottom)
-                    
-                    if isFinishedAdding {
-                        VStack {
-                            Spacer()
-                                                        
-                            Text("Transaction Added")
-                                .foregroundStyle(.white)
-                                .font(.title)
-                                .fontWeight(.bold)
-                                .opacity(isFinishedAdding ? 1 : 0)
-                                .animation(.snappy(duration: 0.3, extraBounce: 0.2), value: isFinishedAdding)
-                            
-                            Spacer()
-                            
-                            Spacer()
-                            
-                            Button {
-                                isPresented = false
-                            } label: {
-                                HStack {
-                                    Spacer()
-                                    Text("Done")
-                                        .font(.title2)
-                                    Spacer()
-                                }
-                                .padding(.horizontal)
-                                .padding(.bottom)
-                            }
-                            .tint(.white)
-                        }
-                    }
-                }
-                .fixedSize()
-                .frame(width: geometry.size.width, height: geometry.size.height)
-            }
         }
+        .padding(.horizontal)
+        .padding(.bottom)
         .background(Color(.systemGroupedBackground))
         .onAppear {
             focusedField = .amount
@@ -291,15 +229,65 @@ extension AddTransaction {
             .first(where: { $0.keyWindow != nil })?
             .keyWindow
     }
+    
+    func successView() -> some View {
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                Text("Transaction Added")
+                    .font(.title)
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            Button("Done") {
+                overlayManager.dequeueOverlay()
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+        }
+    }
+    
+    func errorView() -> some View {
+        VStack {
+            Spacer()
+            
+            HStack {
+                Spacer()
+                Text("Error Adding Transaction")
+                    .font(.title)
+                    .foregroundStyle(.white)
+                    .fontWeight(.bold)
+                Spacer()
+            }
+            
+            Spacer()
+            
+            Button("Done") {
+                overlayManager.dequeueOverlay()
+                self.presentationMode.wrappedValue.dismiss()
+            }
+            .buttonStyle(.bordered)
+            .tint(.white)
+        }
+    }
 }
 
 #Preview {
     @State var api = SpoolSenseApi()
     @State var mainContext = MainViewModel(api: api)
+    @State var overlayManager = OverlayManager()
     
     return AddTransaction(spool: SpoolConstants.demoSpoolOrange, isPresented: .constant(true))
         .environment(api)
         .environment(mainContext)
+        .environment(overlayManager)
         .task {
             await mainContext.loadInitialData()
         }

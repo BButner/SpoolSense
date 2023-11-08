@@ -12,7 +12,6 @@ import SwiftUI
 struct SpoolsView: View {
     @Environment(MainViewModel.self) private var mainContext
     
-    @State private var showAddView = false
     @State private var isAscending = true
     
     @AppStorage("spoolsSortBy") var sortBy: SpoolSortOptions = .name
@@ -49,21 +48,15 @@ struct SpoolsView: View {
                         }
                     }
                 }
+                .padding(.top)
                 
                 HStack {
-                    Button {
-//                        withAnimation {
-//                            showAddView.toggle()
-//                        }
-                    } label: {
+                    NavigationLink(destination: AddSpoolView(selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
                             .scaledToFit()
                             .frame(width: 32, height: 32)
                             .tint(.primary)
-                    }
-                    .fullScreenCover(isPresented: $showAddView)  {
-                        AddSpoolView(showAddView: $showAddView, selectableFilaments: [FilamentConstants.FilamentUnselected] + mainContext.filaments)
                     }
                     
                     Spacer()
@@ -95,7 +88,8 @@ struct SpoolsView: View {
                 
                 SpoolList(loading: !mainContext.initialDataLoaded, spools: mainContext.spools.sorted(by: { sortBy.sortBy(first: $0, second: $1, ascending: self.isAscending) }))
             }
-            .padding()
+            .padding(.horizontal)
+            .padding(.bottom)
             .background(Color(.systemGroupedBackground))
             .refreshable {
                 await mainContext.refreshSpools()

@@ -10,8 +10,12 @@
 import SwiftUI
 
 struct SpoolSheet: View {
+    @Environment(MainViewModel.self) private var mainContext
+    @Environment(SpoolSenseApi.self) private var api
+    
     var selectedSpool: Spool
     @State private var showAddTransaction: Bool = false
+    @State private var transactions: [Transaction] = [Transaction]()
     
     var body: some View {
         ScrollView {
@@ -85,9 +89,24 @@ struct SpoolSheet: View {
         }
         .padding(20)
         .background(Color(.systemGroupedBackground))
+        .onAppear {
+            Task {
+                let loadedTransactions = await api.fetchSpoolTransactions(spoolId: selectedSpool.id)
+                    .map {
+                        Transaction(api: $0)
+                    }
+                
+                transactions.append(contentsOf: loadedTransactions)
+            }
+        }
     }
 }
 
 #Preview {
-    SpoolSheet(selectedSpool: SpoolConstants.demoSpoolOrange)
+    @State var api = SpoolSenseApi()
+    @State var mainContext = MainViewModel(api: api)
+    
+    return SpoolSheet(selectedSpool: SpoolConstants.demoSpoolOrange)
+        .environment(api)
+        .environment(mainContext)
 }

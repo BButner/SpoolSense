@@ -43,7 +43,7 @@ enum TransactionType: String, Codable {
         case .printApi:
             return Image(systemName: "curlybraces")
         case .initial:
-            return Image(systemName: "questionmark.folder.fill")
+            return Image(systemName: "ruler")
         }
     }
 }

@@ -62,3 +62,12 @@ final class Transaction: Identifiable {
         )
     }
 }
+
+struct TransactionConstants {
+    static func generateTransactionsForSpoolId(spoolId: UUID) -> [Transaction] {
+        [
+            Transaction(userId: UUID(), spoolId: spoolId, type: .initial, date: .distantPast, amount: -50, description: ""),
+            Transaction(userId: UUID(), spoolId: spoolId, type: .printManual, date: .now, amount: -4.39, description: "3D Benchy")
+        ]
+    }
+}

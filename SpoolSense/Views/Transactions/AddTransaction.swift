@@ -204,6 +204,10 @@ struct AddTransaction: View {
                             
                             let result = await api.insertTransaction(transaction: transaction.toApi())
                             
+                            if result {
+                                spool.lengthRemaining += transaction.amount
+                            }
+                            
                             // TODO: There should really be an error message here
                             isFinishedAdding = result
                         }

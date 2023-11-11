@@ -83,10 +83,10 @@ struct AddSpoolView: View {
                         .pickerStyle(.navigationLink)
                         .padding()
                         
-                        TextFieldNumber(header: "Spool Length", title: "What's the total original length in meters?", value: $lengthTotal, isInvalid: lengthTotal.isZero || lengthTotal.isLess(than: .zero), errorMessage: "must be above 0")
-                        TextFieldNumber(header: "Spool Length Remaining", title: "How many meters of Filament are left?", value: $lengthRemaining, isInvalid: lengthRemaining.isZero || lengthRemaining.isLess(than: .zero), errorMessage: "must be above 0")
-                        TextFieldNumber(header: "Spool Weight", title: "How much does just the spool (minus filament) weigh?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
-                        TextFieldNumber(header: "Total Weight", title: "How much does the spool currently weigh?", value: $totalWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
+                        TextFieldNumber(header: "Total Filament Length In Meters", title: "What's the total original length in meters?", value: $lengthTotal, isInvalid: lengthTotal.isZero || lengthTotal.isLess(than: .zero), errorMessage: "must be above 0")
+                        TextFieldNumber(header: "Remaining Filament Length In Meters", title: "How many meters of filament are left?", value: $lengthRemaining, isInvalid: lengthRemaining.isZero || lengthRemaining.isLess(than: .zero), errorMessage: "must be above 0")
+                        TextFieldNumber(header: "Spool Weight", title: "Weight of just the spool?", value: $spoolWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
+                        TextFieldNumber(header: "Total Weight", title: "Original total weight without spool?", value: $totalWeight, isInvalid: spoolWeight.isZero || spoolWeight.isLess(than: .zero), errorMessage: "must be above 0")
                         
                         DragConfirm(text: "Swipe to Submit", isLoading: $isLoading, isComplete: $isFinishedAdding, isError: $isErrorAdding, successView: AnyView(successView()), errorView: AnyView(errorView()))
                             .onChange(of: isLoading) {

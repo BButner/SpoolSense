@@ -118,6 +118,23 @@ final class SpoolSenseApi {
         }
     }
     
+    func fetchSpoolTransactions(spoolId: UUID) async -> [TransactionApi] {
+        do {
+            let query = await client.database
+                .from("transactions_dev")
+                .select()
+                .match(query: ["spool_id": spoolId])
+            
+            let response: [TransactionApi] = try await query.execute().value
+            
+            return response
+        } catch {
+            print("Error when Fetching Spool Transactions: \(error) | \(error.localizedDescription)")
+            
+            return []
+        }
+    }
+    
     func insertTransaction(transaction: TransactionApi) async -> Bool {
         do {
             let query = try await client.database

@@ -85,9 +85,13 @@ struct SpoolSheet: View {
                             .tint(.primary)
                     }
                 }
+                
+                ScrollView {
+                    TransactionsList(transactions: transactions)
+                }
             }
+            .padding(20)
         }
-        .padding(20)
         .background(Color(.systemGroupedBackground))
         .onAppear {
             Task {

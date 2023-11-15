@@ -16,34 +16,22 @@ enum TransactionType: String, Codable {
     case printManual = "Manual Print"
     case printApi = "API Print"
     case initial = "Initial Adjustment"
-    
-    var uiColor: Color {
-        switch self {
-        case .refill:
-            return .purple
-        case .manual:
-            return .pink
-        case .printManual:
-            return .indigo
-        case .printApi:
-            return .indigo
-        case .initial:
-            return .gray // These aren't meant to be displayed
-        }
-    }
+    case sync = "Re-Sync"
     
     var icon: Image {
         switch self {
         case .refill:
-            return Image(systemName: "arrow.clockwise")
+            return Image(systemName: "gauge.high")
         case .manual:
-            return Image(systemName: "pencil")
+            return Image(systemName: "wrench.adjustable.fill")
         case .printManual:
             return Image(systemName: "printer.dotmatrix.fill")
         case .printApi:
             return Image(systemName: "curlybraces")
         case .initial:
             return Image(systemName: "ruler")
+        case .sync:
+            return Image(systemName: "arrow.triangle.2.circlepath.circle.fill")
         }
     }
 }

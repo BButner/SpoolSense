@@ -8,6 +8,7 @@
 
 
 import Foundation
+import SwiftUI
 
 @Observable
 final class Transaction: Identifiable {
@@ -61,13 +62,21 @@ final class Transaction: Identifiable {
             description: self.description
         )
     }
+    
+    var uiColor: Color {
+        self.amount < 0 ? .red : .green
+    }
 }
 
 struct TransactionConstants {
     static func generateTransactionsForSpoolId(spoolId: UUID) -> [Transaction] {
         [
             Transaction(userId: UUID(), spoolId: spoolId, type: .initial, date: .distantPast, amount: -50, description: ""),
-            Transaction(userId: UUID(), spoolId: spoolId, type: .printManual, date: .now, amount: -4.39, description: "3D Benchy")
+            Transaction(userId: UUID(), spoolId: spoolId, type: .printManual, date: .now - 100, amount: -4.39, description: "3D Benchy"),
+            Transaction(userId: UUID(), spoolId: spoolId, type: .printApi, date: .now - 75, amount: -1.65, description: "String Towers"),
+            Transaction(userId: UUID(), spoolId: spoolId, type: .manual, date: .now - 50, amount: 17, description: "Some Good Manual Adjustment Description"),
+            Transaction(userId: UUID(), spoolId: spoolId, type: .refill, date: .now - 27, amount: 156, description: "Refill"),
+            Transaction(userId: UUID(), spoolId: spoolId, type: .sync, date: .now, amount: -14.23, description: "Spool Re-Sync"),
         ]
     }
 }

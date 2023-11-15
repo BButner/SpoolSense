@@ -122,7 +122,7 @@ struct SpoolList: View {
 #Preview {
     //    NavigationStack {
     VStack {
-        SpoolList(loading: true, spools: SpoolConstants.demoSpoolCollection)
+        SpoolList(loading: false, spools: SpoolConstants.demoSpoolCollection)
         Spacer()
     }
     .padding()
